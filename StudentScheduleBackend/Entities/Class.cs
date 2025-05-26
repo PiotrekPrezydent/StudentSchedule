@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StudentScheduleBackend.Entities
+﻿namespace StudentScheduleBackend.Entities
 {
     public class Class
     {
@@ -16,9 +10,10 @@ namespace StudentScheduleBackend.Entities
         public int? ClassroomId { get; set; }
         public TimeSpan? StartTime { get; set; }
         public TimeSpan? EndTime { get; set; }
-
         public Program Program { get; set; }
         public Subject Subject { get; set; }
         public Classroom Classroom { get; set; }
+
+        public override string ToString() => $"{Id}\t{ProgramId}\t{SubjectId}\t{Year}\t{Weekday}\t{ClassroomId}\t{StartTime}\t{EndTime}";
     }
 }

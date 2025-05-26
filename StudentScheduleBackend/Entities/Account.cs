@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StudentScheduleBackend.Entities
+﻿namespace StudentScheduleBackend.Entities
 {
     public class Account
     {
@@ -14,6 +8,8 @@ namespace StudentScheduleBackend.Entities
         public string Password { get; set; }
 
         public Student Student { get; set; }
+
+        public override string ToString() => $"{Id}\t{StudentId}\t{Login}\t{Password}";
     }
 
 }

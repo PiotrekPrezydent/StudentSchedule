@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StudentScheduleBackend.Entities
+﻿namespace StudentScheduleBackend.Entities
 {
     public class Program
     {
@@ -14,6 +7,8 @@ namespace StudentScheduleBackend.Entities
 
         public ICollection<StudentProgram> StudentPrograms { get; set; }
         public ICollection<Class> Classes { get; set; }
+
+        public override string ToString() => $"{Id}\t{Name}";
     }
 
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StudentScheduleBackend.Entities
+﻿namespace StudentScheduleBackend.Entities
 {
     public class Student
     {
@@ -16,6 +10,7 @@ namespace StudentScheduleBackend.Entities
         public Account Account { get; set; }
 
         public ICollection<StudentProgram> StudentPrograms { get; set; }
-    }
 
+        public override string ToString() => $"{Id}\t{FirstName}\t{LastName}\t{IndexNumber}";
+    }
 }

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StudentScheduleBackend.Entities
+﻿namespace StudentScheduleBackend.Entities
 {
     public class Classroom
     {
@@ -14,5 +7,7 @@ namespace StudentScheduleBackend.Entities
         public string RoomNumber { get; set; }
 
         public ICollection<Class> Classes { get; set; }
+
+        public override string ToString() => $"{Id}\t{Building}\t{RoomNumber}";
     }
 }
