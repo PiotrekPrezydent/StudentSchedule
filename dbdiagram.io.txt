@@ -1,0 +1,60 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table accounts {
+  id integer [primary key]
+  student_id integer [not null, unique]
+  login varchar [not null, unique]
+  password varchar [not null]
+}
+
+Table students {
+  id integer [primary key]
+  first_name varchar
+  last_name varchar
+  index_number varchar [unique, not null]
+}
+
+Table programs {
+  id integer [primary key]
+  name varchar [not null]
+}
+
+Table student_programs {
+  student_id integer [not null]
+  program_id integer [not null]
+}
+
+Table classrooms {
+  id integer [primary key]
+  building varchar
+  room_number varchar
+}
+
+Table classes {
+  id integer [primary key]
+  program_id integer [not null]
+  subject_id integer [not null]
+  year integer
+  weekday varchar
+  classroom_id integer
+  start_time time
+  end_time time
+}
+
+Table subjects {
+  id integer [primary key]
+  varchar name
+}
+
+Ref account_student: accounts.student_id > students.id
+
+Ref student_program_ref: student_programs.student_id > students.id
+
+Ref program_student_ref: student_programs.program_id > programs.id
+
+Ref class_program_ref: classes.program_id > programs.id
+
+Ref class_classroom_ref: classes.classroom_id > classrooms.id
+
+Ref class_subject_ref: classes.subject_id > subjects.id
