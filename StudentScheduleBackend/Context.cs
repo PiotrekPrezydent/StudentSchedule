@@ -16,7 +16,7 @@ namespace StudentScheduleBackend
             }
         }
         static Context? _instance;
-
+        
         Context(DbContextOptions<Context> options) : base(options) { }
 
         static IConfiguration? _configuration = null;

@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentScheduleBackend.Entities;
+using StudentScheduleBackend.Exceptions;
+using StudentScheduleBackend.Interfaces;
 
 namespace StudentScheduleBackend.Repositories
 {
-    public class SubjectRepository
+    public class SubjectRepository : IRepository<Subject>
     {
         readonly Context _context;
         public SubjectRepository(Context context) => _context = context;
@@ -16,7 +18,13 @@ namespace StudentScheduleBackend.Repositories
 
         public List<Subject> GetAll() => _context.Subjects.Include(s => s.Classes).ToList();
 
-        public Subject? GetById(int id) => _context.Subjects.Include(s => s.Classes).FirstOrDefault(s => s.Id == id);
+        public Subject GetById(int id)
+        {
+            if(!_context.Subjects.Any(e=>e.Id == id))
+                throw new KeyNotFoundException($"Subject with id:{id} could not be found.");
+
+            return _context.Subjects.Include(s => s.Classes).First(s => s.Id == id);
+        }
 
         public bool Update(Subject subject)
         {
@@ -27,11 +35,11 @@ namespace StudentScheduleBackend.Repositories
         public bool Delete(int id)
         {
             var subject = _context.Subjects.Find(id);
-            if (subject == null) return false;
+            if (subject == null)
+                throw new KeyNotFoundException($"Subject with id:{id} could not be found.");
 
-            ClassRepository cr = new(_context);
-            if (cr.GetAll().Any(c => c.SubjectId == subject.Id))
-                return false;
+            if (_context.Classes.Any(c => c.SubjectId == subject.Id))
+                throw new ReferentialIntegrityException($"Cannot delete subject with {id} becouse it is assigned to one or more classes.");
 
             _context.Subjects.Remove(subject);
             return _context.SaveChanges() > 0;

@@ -1,10 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using StudentScheduleBackend.Entities;
+using StudentScheduleBackend.Exceptions;
+using StudentScheduleBackend.Interfaces;
 
 namespace StudentScheduleBackend.Repositories
 {
-    public class ProgramRepository
+    public class ProgramRepository : IRepository<Program>
     {
         readonly Context _context;
         public ProgramRepository(Context context) => _context = context;
@@ -17,7 +19,13 @@ namespace StudentScheduleBackend.Repositories
 
         public List<Program> GetAll() => _context.Programs.Include(p => p.StudentPrograms).Include(p => p.Classes).ToList();
 
-        public Program? GetById(int id) => _context.Programs.Include(p => p.StudentPrograms).Include(p => p.Classes).FirstOrDefault(p => p.Id == id);
+        public Program GetById(int id)
+        {
+            if(!_context.Programs.Any(e=>e.Id == id))
+                throw new KeyNotFoundException($"program with id:{id} could not be found");
+
+            return _context.Programs.Include(p => p.StudentPrograms).Include(p => p.Classes).First(p => p.Id == id);
+        }
 
         public bool Update(Program program)
         {
@@ -28,12 +36,16 @@ namespace StudentScheduleBackend.Repositories
         public bool Delete(int id)
         {
             var program = _context.Programs.Find(id);
-            if (program == null) return false;
-            ClassRepository cr = new(_context);
+            if (program == null)
+                throw new KeyNotFoundException($"program with id:{id} could not be found");
+
             StudentProgramRepository spr = new(_context);
 
-            if(cr.GetAll().Any(e=>e.ProgramId == program.Id) ||  spr.GetAll().Any(e=>e.ProgramId == program.Id))
-                return false;
+            if(_context.Classes.Any(e=>e.ProgramId == program.Id))
+                throw new ReferentialIntegrityException($"cannot delete program with {id} becouse it is assigned to one or more classes");
+
+            if(_context.StudentPrograms.Any(e=>e.ProgramId == program.Id))
+               throw new ReferentialIntegrityException($"cannot delete program with {id} becouse it is assigned to one or more students");
 
             _context.Programs.Remove(program);
             return _context.SaveChanges() > 0;

@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentScheduleBackend.Entities;
+using StudentScheduleBackend.Exceptions;
+using StudentScheduleBackend.Interfaces;
 
 namespace StudentScheduleBackend.Repositories
 {
-    public class StudentRepository
+    public class StudentRepository : IRepository<Student>
     {
         readonly Context _context;
         public StudentRepository(Context context) => _context = context;
@@ -16,7 +18,13 @@ namespace StudentScheduleBackend.Repositories
 
         public List<Student> GetAll() => _context.Students.Include(s => s.Account).Include(s => s.StudentPrograms).ToList();
 
-        public Student? GetById(int id) => _context.Students.Include(s => s.Account).Include(s => s.StudentPrograms).FirstOrDefault(s => s.Id == id);
+        public Student GetById(int id)
+        {
+            if (!_context.Students.Any(e=>e.Id == id))
+                throw new KeyNotFoundException($"Student with id:{id} could not be found.");
+
+            return _context.Students.Include(s => s.Account).Include(s => s.StudentPrograms).First(s => s.Id == id);
+        }
 
         public bool Update(Student student)
         {
@@ -24,17 +32,14 @@ namespace StudentScheduleBackend.Repositories
             return _context.SaveChanges() > 0;
         }
 
-        //td add exceptions
         public bool Delete(int id)
         {
             var student = _context.Students.Find(id);
-            if (student == null) return false;
+            if (student == null)
+                throw new KeyNotFoundException($"Student with id:{id} could not be found.");
 
-            AccountRepository ar = new(_context);
-
-            if (ar.GetAll().Any(a => a.StudentId == student.Id))
-                return false;
-
+            if (!_context.Accounts.Any(a => a.StudentId == student.Id))
+                throw new ReferentialIntegrityException($"Cannot delete program with {id} becouse it is assigned to one or more accounts.");
 
             _context.Students.Remove(student);
             return _context.SaveChanges() > 0;
