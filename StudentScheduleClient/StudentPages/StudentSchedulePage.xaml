@@ -8,35 +8,74 @@
       mc:Ignorable="d" 
       d:DesignHeight="400" d:DesignWidth="600"
       Title="StudentStartPage">
-
-    <StackPanel Background="White">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <Button
+    <Grid Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*" />
+            <ColumnDefinition Width="60*" />
+            <ColumnDefinition Width="20*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <Button
                 x:Name="PreviousDayBTN"
                 Content="&lt;&lt;"
-                Grid.Column="0" Click="PreviousDayBTN_Click" 
+                Grid.Column="0" 
+                Grid.Row="1"
+                Click="PreviousDayBTN_Click" 
                 />
 
-            <TextBlock
+        <TextBlock
                 x:Name="WeekDayNameTextBlock"
                 Text="Monday"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
+                Grid.Row="1"
                 Grid.Column="1"
                 />
 
-            <Button
+        <Button
                 x:Name="NextDayBTN"
                 Content="&gt;&gt;"
+                Grid.Row="1"
                 Grid.Column="2" Click="NextDayBTN_Click"
                 />
-        </Grid>
-        <StackPanel x:Name="ProgramsContainer" Margin="10"/>
-    </StackPanel>
+        <ListView ItemsSource="{Binding GroupedProgramsWithClasses}"
+                  Grid.Row="3"
+                  Grid.RowSpan="1"
+                  Grid.ColumnSpan="3">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <!-- Program Name (Key.Name) -->
+                        <TextBlock Text="{Binding Key.Name}" 
+                                   FontWeight="Bold" FontSize="16" Margin="0,0,0,5"/>
+
+                        <!-- Nested ListView showing classes (Value) -->
+                        <ListView ItemsSource="{Binding Value}" Margin="20,0,0,10">
+                            <ListView.Resources>
+                                <Style TargetType="GridViewColumnHeader">
+                                    <Setter Property="IsHitTestVisible" Value="False"/>
+                                </Style>
+                            </ListView.Resources>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Przedmiot" Width="150" DisplayMemberBinding="{Binding Subject.Name}" />
+                                    <GridViewColumn Header="OD:" Width="60" DisplayMemberBinding="{Binding StartTime}" />
+                                    <GridViewColumn Header="DO:" Width="60" DisplayMemberBinding="{Binding EndTime}" />
+                                    <GridViewColumn Header="Sala" Width="50" DisplayMemberBinding="{Binding Classroom.RoomNumber}" />
+                                    <GridViewColumn Header="Budynek" Width="50" DisplayMemberBinding="{Binding Classroom.Building}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </Grid>
 </Page>

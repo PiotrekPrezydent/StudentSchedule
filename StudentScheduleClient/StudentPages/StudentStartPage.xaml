@@ -12,6 +12,7 @@
             x:Name="WelcomeBlock"
             Text="Witaj!&#x0a;Jak się masz?"
             HorizontalAlignment="Center"
+            TextAlignment="Center"
             VerticalAlignment="Center"
             />
     </Grid>

@@ -14,17 +14,13 @@
             Text="Rozpoczęte Kierunki:"
             TextAlignment="Center"
             />
-        <ListBox x:Name="ProgramsListBox">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
 
-            <sys:String>Mathematics</sys:String>
-            <sys:String>Physics</sys:String>
-            <sys:String>Chemistry</sys:String>
-            <sys:String>Biology</sys:String>
-        </ListBox>
+        <ListView x:Name="ProgramsListView">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Nazwa Kierunku" DisplayMemberBinding="{Binding Name}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </StackPanel>
 </Page>

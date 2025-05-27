@@ -25,7 +25,7 @@ namespace StudentScheduleClient.StudentPages
             InitializeComponent();
             WelcomeBlock.Text =
                 $"Witaj!\n" +
-                $"{App.CurrentStudent.FirstName}\t{App.CurrentStudent.LastName}\n" +
+                $"{App.CurrentStudent.FirstName} {App.CurrentStudent.LastName}\n" +
                 $"{App.CurrentStudent.IndexNumber}";
            
         }

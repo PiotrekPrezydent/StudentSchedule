@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using StudentScheduleBackend.Entities;
 using StudentScheduleBackend.Exceptions;
 
