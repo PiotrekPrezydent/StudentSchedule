@@ -28,6 +28,11 @@ namespace StudentScheduleBackend.Repositories
         {
             var subject = _context.Subjects.Find(id);
             if (subject == null) return false;
+
+            ClassRepository cr = new(_context);
+            if (cr.GetAll().Any(c => c.SubjectId == subject.Id))
+                return false;
+
             _context.Subjects.Remove(subject);
             return _context.SaveChanges() > 0;
         }

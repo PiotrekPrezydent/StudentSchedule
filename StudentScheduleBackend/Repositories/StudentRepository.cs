@@ -24,10 +24,18 @@ namespace StudentScheduleBackend.Repositories
             return _context.SaveChanges() > 0;
         }
 
+        //td add exceptions
         public bool Delete(int id)
         {
             var student = _context.Students.Find(id);
             if (student == null) return false;
+
+            AccountRepository ar = new(_context);
+
+            if (ar.GetAll().Any(a => a.StudentId == student.Id))
+                return false;
+
+
             _context.Students.Remove(student);
             return _context.SaveChanges() > 0;
         }

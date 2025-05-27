@@ -29,6 +29,11 @@ namespace StudentScheduleBackend.Repositories
         {
             var classroom = _context.Classrooms.Find(id);
             if (classroom == null) return false;
+            ClassRepository cr = new(_context);
+
+            if (cr.GetAll().Any(e => e.ClassroomId == classroom.Id))
+                return false;
+
             _context.Classrooms.Remove(classroom);
             return _context.SaveChanges() > 0;
         }

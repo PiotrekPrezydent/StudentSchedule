@@ -8,6 +8,14 @@
         public ICollection<StudentProgram> StudentPrograms { get; set; }
         public ICollection<Class> Classes { get; set; }
 
+        public Program() { }
+
+        public Program(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
         public override string ToString() => $"{Id}\t{Name}";
     }
 

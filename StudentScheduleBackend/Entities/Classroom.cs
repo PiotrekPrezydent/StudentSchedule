@@ -8,6 +8,15 @@
 
         public ICollection<Class> Classes { get; set; }
 
+        public Classroom() { }
+
+        public Classroom(int id, string building, string roomNumber)
+        {
+            Id = id;
+            Building = building;
+            RoomNumber = roomNumber;
+        }
+
         public override string ToString() => $"{Id}\t{Building}\t{RoomNumber}";
     }
 }

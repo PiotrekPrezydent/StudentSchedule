@@ -11,6 +11,15 @@
 
         public ICollection<StudentProgram> StudentPrograms { get; set; }
 
+        public Student() { }
+
+        public Student(string firstName, string lastName, string indexNumber)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            IndexNumber = indexNumber;
+        }
+
         public override string ToString() => $"{Id}\t{FirstName}\t{LastName}\t{IndexNumber}";
     }
 }

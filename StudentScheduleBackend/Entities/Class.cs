@@ -14,6 +14,20 @@
         public Subject Subject { get; set; }
         public Classroom Classroom { get; set; }
 
+        //EF constructor
+        public Class() { }
+
+        public Class(int programId, int subjectId, int year, string weekday, int? classroomId, TimeSpan? startTime, TimeSpan? endTime)
+        {
+            ProgramId = programId;
+            SubjectId = subjectId;
+            Year = year;
+            Weekday = weekday;
+            ClassroomId = classroomId;
+            StartTime = startTime;
+            EndTime = endTime;
+        }
+
         public override string ToString() => $"{Id}\t{ProgramId}\t{SubjectId}\t{Year}\t{Weekday}\t{ClassroomId}\t{StartTime}\t{EndTime}";
     }
 }

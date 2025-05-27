@@ -29,6 +29,12 @@ namespace StudentScheduleBackend.Repositories
         {
             var program = _context.Programs.Find(id);
             if (program == null) return false;
+            ClassRepository cr = new(_context);
+            StudentProgramRepository spr = new(_context);
+
+            if(cr.GetAll().Any(e=>e.ProgramId == program.Id) ||  spr.GetAll().Any(e=>e.ProgramId == program.Id))
+                return false;
+
             _context.Programs.Remove(program);
             return _context.SaveChanges() > 0;
         }
