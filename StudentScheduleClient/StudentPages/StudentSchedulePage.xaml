@@ -1,0 +1,42 @@
+﻿<Page x:Class="StudentScheduleClient.StudentPages.StudentSchedulePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:StudentScheduleClient.StudentPages"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      mc:Ignorable="d" 
+      d:DesignHeight="400" d:DesignWidth="600"
+      Title="StudentStartPage">
+
+    <StackPanel Background="White">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button
+                x:Name="PreviousDayBTN"
+                Content="&lt;&lt;"
+                Grid.Column="0" Click="PreviousDayBTN_Click" 
+                />
+
+            <TextBlock
+                x:Name="WeekDayNameTextBlock"
+                Text="Monday"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Column="1"
+                />
+
+            <Button
+                x:Name="NextDayBTN"
+                Content="&gt;&gt;"
+                Grid.Column="2" Click="NextDayBTN_Click"
+                />
+        </Grid>
+        <StackPanel x:Name="ProgramsContainer" Margin="10"/>
+    </StackPanel>
+</Page>

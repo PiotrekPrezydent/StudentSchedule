@@ -1,0 +1,30 @@
+﻿<Page x:Class="StudentScheduleClient.StudentPages.StudentProgramsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:StudentScheduleClient.StudentPages"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      mc:Ignorable="d" 
+      d:DesignHeight="400" d:DesignWidth="600"
+      Title="StudentStartPage">
+    <StackPanel Background="White">
+        <TextBlock
+            x:Name="WelcomeBlock"
+            Text="Rozpoczęte Kierunki:"
+            TextAlignment="Center"
+            />
+        <ListBox x:Name="ProgramsListBox">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+            <sys:String>Mathematics</sys:String>
+            <sys:String>Physics</sys:String>
+            <sys:String>Chemistry</sys:String>
+            <sys:String>Biology</sys:String>
+        </ListBox>
+    </StackPanel>
+</Page>

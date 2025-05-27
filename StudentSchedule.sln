@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentScheduleBackend", "StudentScheduleBackend\StudentScheduleBackend.csproj", "{D0DE9614-B7B4-4AD2-8150-761FC7141ABB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLI", "CLI\CLI.csproj", "{A0B6F047-E094-41B2-BC3C-1A92A3929E49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentScheduleClient", "StudentScheduleClient\StudentScheduleClient.csproj", "{59B44626-C9EE-47F4-BD3F-89C837A4664F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A0B6F047-E094-41B2-BC3C-1A92A3929E49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0B6F047-E094-41B2-BC3C-1A92A3929E49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0B6F047-E094-41B2-BC3C-1A92A3929E49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59B44626-C9EE-47F4-BD3F-89C837A4664F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59B44626-C9EE-47F4-BD3F-89C837A4664F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59B44626-C9EE-47F4-BD3F-89C837A4664F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59B44626-C9EE-47F4-BD3F-89C837A4664F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
