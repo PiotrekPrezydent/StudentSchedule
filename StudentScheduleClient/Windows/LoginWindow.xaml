@@ -29,7 +29,7 @@
             Grid.Row="1"
             x:Name="ErrorMessage"
             Text=""
-            TextAlignment="Center"
+            TextAlignment="Left"
             Padding="10"
             />
 

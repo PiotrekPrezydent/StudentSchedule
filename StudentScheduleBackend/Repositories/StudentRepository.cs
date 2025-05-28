@@ -45,6 +45,7 @@ namespace StudentScheduleBackend.Repositories
             if (!_context.Accounts.Any(a => a.StudentId == student.Id))
                 throw new ReferentialIntegrityException($"Cannot delete program with {id} becouse it is assigned to one or more accounts.");
 
+            _context.ChangeTracker.Clear();
             _context.Students.Remove(student);
             return _context.SaveChanges() > 0;
         }

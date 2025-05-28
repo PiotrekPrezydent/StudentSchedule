@@ -37,6 +37,7 @@ namespace StudentScheduleBackend.Repositories
             if (!_context.Students.Any(e => e.Id == account.StudentId))
                 throw new ForeignKeyNotFoundException($"Student with ID {account.StudentId} does not exist.");
 
+            _context.ChangeTracker.Clear();
             _context.Accounts.Update(account);
             return _context.SaveChanges() > 0;
         }

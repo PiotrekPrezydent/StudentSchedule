@@ -40,17 +40,18 @@ namespace StudentScheduleClient
 
             bool logged = false;
             Account acc;
-            try
-            {
+            //try
+            //{
                 acc = ac.GetAll().FirstOrDefault(e => e.Login == login && e.Password == password);
                 logged = !EqualityComparer<Account>.Default.Equals(acc, default(Account));
-            }
-            catch(Exception ex)
-            {
-                cancelToken.Cancel();
-                ErrorMessage.Text = $"{ex}";
-                return;
-            }
+            //}
+            //catch(Exception ex)
+            //{
+            //    cancelToken.Cancel();
+            //    ErrorMessage.Text = $"{ex}";
+            //    MessageBox.Show(ex.ToString());
+            //    return;
+            //}
 
             if (logged)
             {

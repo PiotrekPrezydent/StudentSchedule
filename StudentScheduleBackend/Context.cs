@@ -56,7 +56,7 @@ namespace StudentScheduleBackend
                 }
                 else
                 {
-                    connectionString = "Server=localhost\\SQLEXPRESS;Database=StudentSchedule;Trusted_Connection=True;TrustServerCertificate=True;";
+                    connectionString = "Server=localhost\\SQLEXPRESS;Database=StudentSchedule;User Id=ReadOnlyUser;Password=readpass;TrustServerCertificate=True;";
                 }
 
                 optionsBuilder.UseSqlServer(connectionString);

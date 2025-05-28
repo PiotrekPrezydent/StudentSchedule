@@ -46,6 +46,7 @@ namespace StudentScheduleBackend.Repositories
             if (_context.Classes.Any(e => e.ClassroomId == classroom.Id))
                 throw new ReferentialIntegrityException($"cannot delete classroom with {id} becouse it is assigned to one or more classes");
 
+            _context.ChangeTracker.Clear();
             _context.Classrooms.Remove(classroom);
             return _context.SaveChanges() > 0;
         }

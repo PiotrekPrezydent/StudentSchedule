@@ -45,6 +45,7 @@ namespace StudentScheduleBackend.Repositories
             if (_context.Classes.Any(c => c.SubjectId == subject.Id))
                 throw new ReferentialIntegrityException($"Cannot delete subject with {id} becouse it is assigned to one or more classes.");
 
+            _context.ChangeTracker.Clear();
             _context.Subjects.Remove(subject);
             return _context.SaveChanges() > 0;
         }

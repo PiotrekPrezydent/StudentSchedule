@@ -70,6 +70,7 @@ namespace StudentScheduleBackend.Repositories
             if (sp == null)
                 throw new KeyNotFoundException($"Connection between student with id: {studentId} and program with id: {programId} could not be found");
 
+            _context.ChangeTracker.Clear();
             _context.StudentPrograms.Remove(sp);
             return _context.SaveChanges() > 0;
         }

@@ -68,6 +68,7 @@ namespace StudentScheduleBackend.Repositories
             if (@class == null)
                 throw new KeyNotFoundException($"Class with id:{id} could not be found.");
 
+            _context.ChangeTracker.Clear();
             _context.Classes.Remove(@class);
             return _context.SaveChanges() > 0;
         }

@@ -51,6 +51,7 @@ namespace StudentScheduleBackend.Repositories
             if(_context.StudentPrograms.Any(e=>e.ProgramId == program.Id))
                throw new ReferentialIntegrityException($"cannot delete program with {id} becouse it is assigned to one or more students");
 
+            _context.ChangeTracker.Clear();
             _context.Programs.Remove(program);
             return _context.SaveChanges() > 0;
         }
