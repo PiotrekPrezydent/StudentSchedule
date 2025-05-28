@@ -26,7 +26,7 @@ namespace StudentScheduleBackend
         }
         static Context? _instance;
         
-        Context(DbContextOptions<Context> options) : base(options) { }
+        public Context(DbContextOptions<Context> options) : base(options) { }
 
         //lock singleton from multi-thearding creations of same object
         static readonly object _lock = new();
