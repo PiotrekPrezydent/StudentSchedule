@@ -10,9 +10,8 @@
 
         public Classroom() { }
 
-        public Classroom(int id, string building, string roomNumber)
+        public Classroom(string building, string roomNumber)
         {
-            Id = id;
             Building = building;
             RoomNumber = roomNumber;
         }

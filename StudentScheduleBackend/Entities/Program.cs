@@ -10,9 +10,8 @@
 
         public Program() { }
 
-        public Program(int id, string name)
+        public Program(string name)
         {
-            Id = id;
             Name = name;
         }
 

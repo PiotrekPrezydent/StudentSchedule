@@ -45,6 +45,18 @@ namespace StudentScheduleBackend.Repositories
             .First(sp => sp.StudentId == studentId && sp.ProgramId == programId);
         }
 
+        public bool Update(StudentProgram sp)
+        {
+            if (!_context.Students.Any(e => e.Id == sp.StudentId))
+                throw new ForeignKeyNotFoundException($"Student with ID {sp.StudentId} does not exist.");
+
+            if (!_context.Programs.Any(e => e.Id == sp.ProgramId))
+                throw new ForeignKeyNotFoundException($"Program with ID {sp.ProgramId} does not exist.");
+
+            _context.StudentPrograms.Update(sp);
+            return _context.SaveChanges() > 0;
+        }
+
         public bool Delete(int studentId, int programId)
         {
             if (!_context.Students.Any(e => e.Id == studentId))

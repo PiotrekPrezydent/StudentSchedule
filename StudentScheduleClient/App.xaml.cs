@@ -22,6 +22,11 @@ namespace StudentScheduleClient
             instance.Close();
         }
 
+        public static void StartAdminSession(LoginWindow instance)
+        {
+            AdminWindow window = new AdminWindow();
+            window.Show();
+            instance.Close();
+        }
     }
-
 }

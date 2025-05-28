@@ -7,7 +7,7 @@
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       mc:Ignorable="d" 
       d:DesignHeight="400" d:DesignWidth="600"
-      Title="StudentStartPage">
+      Title="StudentSchedulePage">
     <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20*" />
