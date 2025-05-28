@@ -1,4 +1,6 @@
-﻿namespace StudentScheduleBackend.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace StudentScheduleBackend.Entities
 {
     public class Classroom
     {
@@ -6,6 +8,7 @@
         public string Building { get; set; }
         public string RoomNumber { get; set; }
 
+        [JsonIgnore]
         public ICollection<Class> Classes { get; set; }
 
         public Classroom() { }

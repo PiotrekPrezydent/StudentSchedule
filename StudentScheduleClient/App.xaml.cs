@@ -1,6 +1,9 @@
 ﻿using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Windows;
+using System.Windows.Media;
+using Microsoft.EntityFrameworkCore;
 using StudentScheduleBackend;
 using StudentScheduleBackend.Entities;
 using StudentScheduleClient.Windows;
@@ -14,6 +17,27 @@ namespace StudentScheduleClient
     {
         public static Context DBContext;
         public static Student CurrentStudent;
+#if DEBUG
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            // Create DbContext with your debug connection string
+            var options = new DbContextOptionsBuilder<Context>()
+                .UseSqlServer($"Server=localhost\\SQLEXPRESS;Database=StudentSchedule;Trusted_Connection=True;TrustServerCertificate=True;")
+                .Options;
+
+            using (var context = new Context(options))
+            {
+                context.Database.EnsureDeleted();
+                context.Database.Migrate();
+
+                string seedFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "seed");
+
+                Seeder.SeedAllFromJson(context, seedFolder);
+            }
+       }
+#endif
 
         public static void StartStudentSession(LoginWindow instance,Student currentStudent)
         {

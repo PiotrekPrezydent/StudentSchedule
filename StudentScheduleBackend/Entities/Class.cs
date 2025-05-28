@@ -1,4 +1,6 @@
-﻿namespace StudentScheduleBackend.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace StudentScheduleBackend.Entities
 {
     public class Class
     {
@@ -10,8 +12,14 @@
         public int? ClassroomId { get; set; }
         public TimeSpan? StartTime { get; set; }
         public TimeSpan? EndTime { get; set; }
+
+        [JsonIgnore]
         public Program Program { get; set; }
+
+        [JsonIgnore]
         public Subject Subject { get; set; }
+
+        [JsonIgnore]
         public Classroom Classroom { get; set; }
 
         //EF constructor

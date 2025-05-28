@@ -8,12 +8,19 @@ namespace StudentScheduleBackend
 {
     public class Context : DbContext
     {
-        //Those string should be encrypted in code or be getted from server, but i dont get paid enough to do so...
-        const string ReadWriteLogin = "ReadWriteUser";
-        const string ReadWritePass = "adminpass";
+#if DEBUG
+        internal const string ReadWriteLogin = "ReadWriteUser";
+        internal const string ReadWritePass = "adminpass";
 
-        const string ReadLogin = "ReadOnlyUser";
-        const string ReadPass = "readpass";
+        internal const string ReadLogin = "ReadOnlyUser";
+        internal const string ReadPass = "readpass";
+#else
+        internal const string ReadWriteLogin = "SOMEENCRYPTEDVALUEFROMSERVER";
+        internal const string ReadWritePass = "SOMEENCRYPTEDVALUEFROMSERVER";
+
+        internal const string ReadLogin = "SOMEENCRYPTEDVALUEFROMSERVER";
+        internal const string ReadPass = "SOMEENCRYPTEDVALUEFROMSERVER";
+#endif
 
         public static Context Instance
         {
@@ -89,14 +96,6 @@ namespace StudentScheduleBackend
 
         public void Flush() => _instance = null;
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        var connectionString = _configuration.GetConnectionString("DefaultConnection");
-        //        optionsBuilder.UseSqlServer(connectionString);
-        //    }
-        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Unique constraints

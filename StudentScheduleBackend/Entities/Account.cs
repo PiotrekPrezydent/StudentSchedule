@@ -1,4 +1,6 @@
-﻿namespace StudentScheduleBackend.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace StudentScheduleBackend.Entities
 {
     public class Account
     {
@@ -8,6 +10,7 @@
 
         public bool IsAdmin { get; set; }
 
+        [JsonIgnore]
         public Student Student { get; set; }
 
         //ef constructor

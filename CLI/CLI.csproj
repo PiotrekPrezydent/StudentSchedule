@@ -11,4 +11,10 @@
     <ProjectReference Include="..\StudentScheduleBackend\StudentScheduleBackend.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="AppSettings.json" TargetPath="AppSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

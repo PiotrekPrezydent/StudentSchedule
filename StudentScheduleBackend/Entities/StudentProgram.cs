@@ -1,11 +1,16 @@
-﻿namespace StudentScheduleBackend.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace StudentScheduleBackend.Entities
 {
     public class StudentProgram
     {
         public int StudentId { get; set; }
         public int ProgramId { get; set; }
 
+        [JsonIgnore]
         public Student Student { get; set; }
+
+        [JsonIgnore]
         public Program Program { get; set; }
 
 

@@ -10,7 +10,6 @@ internal class AppDbContextFactory : IDesignTimeDbContextFactory<Context>
     {
         var optionsBuilder = new DbContextOptionsBuilder<Context>();
 
-        // Use your actual connection string or a placeholder
         optionsBuilder.UseSqlServer("Server=localhost;Database=StudentSchedule;Trusted_Connection=True;TrustServerCertificate=True;");
 
         return new Context(optionsBuilder.Options);
