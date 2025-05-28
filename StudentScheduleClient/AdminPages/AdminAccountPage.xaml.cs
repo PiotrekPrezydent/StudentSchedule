@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -14,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using StudentScheduleBackend.Entities;
+using StudentScheduleBackend.Extensions;
 using StudentScheduleBackend.Repositories;
 using StudentScheduleClient.Windows;
 
@@ -25,12 +27,28 @@ namespace StudentScheduleClient.AdminPages
     public partial class AdminAccountPage : Page
     {
         AccountRepository _repository;
+        List<KeyValuePair<string, object>> _filters;
         public AdminAccountPage()
         {
             InitializeComponent();
             DataContext = this;
             _repository = new(App.DBContext);
-            Entities.ItemsSource = _repository.GetAll();
+            _filters = new();
+            Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
+        }
+
+        void FilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            var filterPopup = new FilterPopup(typeof(Account), _filters)
+            {
+                Owner = Window.GetWindow(this)
+            };
+            bool? result = filterPopup.ShowDialog();
+            if (result == true)
+            {
+                _filters = filterPopup.ResultFilters;
+                Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
+            }
         }
 
         void EditButton_Click(object sender, RoutedEventArgs e)
@@ -47,7 +65,7 @@ namespace StudentScheduleClient.AdminPages
             {
                 MessageBox.Show($"Saved changes for account: {account.Id}");
             }
-            Entities.ItemsSource = _repository.GetAll();
+            Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
         }
 
         void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -66,7 +84,7 @@ namespace StudentScheduleClient.AdminPages
             }
             finally
             {
-                Entities.ItemsSource = _repository.GetAll();
+                Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
             }
         }
         void AddButton_Click(object sender, RoutedEventArgs e)
@@ -81,7 +99,7 @@ namespace StudentScheduleClient.AdminPages
             {
                 MessageBox.Show($"added new entity with id: {_repository.GetAll().Last().Id}");
             }
-            Entities.ItemsSource = _repository.GetAll();
+            Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
         }
     }
 }

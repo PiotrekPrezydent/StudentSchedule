@@ -17,24 +17,23 @@ namespace StudentScheduleClient
 
         void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-
-
             var cancelToken = new CancellationTokenSource();
             var login = LoginBox.Text;
             var password = PasswordBox.Text;
-            if (App.DBContext == null)
-                App.DBContext = Context.Initialize(null);
+
 #if DEBUG
             if (login == "ADMIN" && password == "ADMIN")
             {
                 cancelToken.Cancel();
                 App.StartAdminSession(this);
+                if (App.DBContext == null)
+                    App.DBContext = Context.Initialize(null, false);
                 return;
             }
 #endif
-
-                ShowLoadingText();
-
+            if (App.DBContext == null)
+                App.DBContext = Context.Initialize(null, false);
+            ShowLoadingText();
 
 
             AccountRepository ac = new(App.DBContext);

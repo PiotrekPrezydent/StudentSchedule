@@ -33,13 +33,6 @@
             <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock
-            x:Name="StudentIndex"
-            Grid.Column="1"
-            TextAlignment="Right"
-            Text="Student: "
-            />
-
         <Button
             x:Name="StartBTN"
             Grid.Row="1"

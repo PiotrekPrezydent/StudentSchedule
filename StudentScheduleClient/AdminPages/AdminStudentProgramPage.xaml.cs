@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using StudentScheduleBackend.Entities;
+using StudentScheduleBackend.Extensions;
 using StudentScheduleBackend.Interfaces;
 using StudentScheduleBackend.Repositories;
 using StudentScheduleClient.Windows;
@@ -25,12 +26,28 @@ namespace StudentScheduleClient.AdminPages
     public partial class AdminStudentProgramPage : Page
     {
         StudentProgramRepository _repository;
+        List<KeyValuePair<string, object>> _filters;
         public AdminStudentProgramPage()
         {
             InitializeComponent();
             DataContext = this;
             _repository = new(App.DBContext);
-            Entities.ItemsSource = _repository.GetAll();
+            _filters = new();
+            Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
+        }
+
+        void FilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            var filterPopup = new FilterPopup(typeof(Account), _filters)
+            {
+                Owner = Window.GetWindow(this)
+            };
+            bool? result = filterPopup.ShowDialog();
+            if (result == true)
+            {
+                _filters = filterPopup.ResultFilters;
+                Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
+            }
         }
 
         void EditButton_Click(object sender, RoutedEventArgs e)
@@ -47,7 +64,7 @@ namespace StudentScheduleClient.AdminPages
             {
                 MessageBox.Show($"Saved changes for student program connection: StudentID: {entity.StudentId} ProgramID {entity.ProgramId}");
             }
-            Entities.ItemsSource = _repository.GetAll();
+            Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters); ;
         }
 
         void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -66,7 +83,7 @@ namespace StudentScheduleClient.AdminPages
             }
             finally
             {
-                Entities.ItemsSource = _repository.GetAll();
+                Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters); ;
             }
         }
 
@@ -82,7 +99,7 @@ namespace StudentScheduleClient.AdminPages
             {
                 MessageBox.Show($"added new connection for student and program");
             }
-            Entities.ItemsSource = _repository.GetAll();
+            Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters); ;
         }
     }
 }

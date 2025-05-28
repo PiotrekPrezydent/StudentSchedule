@@ -10,7 +10,9 @@
 
     <Grid Background="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="80*"/>
+            <RowDefinition Height="65*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="10*"/>
             <RowDefinition Height="5*"/>
             <RowDefinition Height="10*"/>
             <RowDefinition Height="5*"/>
@@ -27,13 +29,13 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                     <Button Content="Edit" Margin="2"
-                                    Click="EditButton_Click"
-                                    Tag="{Binding}"
-                                    />
+                                            Click="EditButton_Click"
+                                            Tag="{Binding}"
+                                            />
                                     <Button Content="Delete" Margin="2"
-                                    Click="DeleteButton_Click"
-                                    Tag="{Binding}"
-                                    />
+                                            Click="DeleteButton_Click"
+                                            Tag="{Binding}"
+                                            />
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -43,6 +45,12 @@
         </ListView>
         <Button
             Grid.Row="2"
+            Content="SetFilters" Margin="2"
+            Click="FilterButton_Click"
+            Tag="{Binding}"
+           />
+        <Button
+            Grid.Row="4"
             Content="Add" Margin="2"
             Click="AddButton_Click"
             Tag="{Binding}"

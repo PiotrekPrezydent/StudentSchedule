@@ -31,7 +31,7 @@ namespace StudentScheduleBackend
         internal DbSet<Classroom> Classrooms { get; set; }
         internal DbSet<Subject> Subjects { get; set; }
 
-        public static Context Initialize(string? configPath)
+        public static Context Initialize(string? configPath,bool adminAccount)
         {
             if (_instance != null)
                 return _instance;
@@ -49,7 +49,10 @@ namespace StudentScheduleBackend
                     _configuration = new ConfigurationBuilder()
                     .AddJsonFile(path: configPath, optional: false, reloadOnChange: true)
                     .Build();
-                    connectionString = _configuration.GetConnectionString("DefaultConnection");
+                    if(adminAccount)
+                        connectionString = _configuration.GetConnectionString("ReadWriteConnection");
+                    else
+                        connectionString = _configuration.GetConnectionString("ReadOnlyConnection");
                 }
                 else
                 {
@@ -61,6 +64,8 @@ namespace StudentScheduleBackend
                 return _instance;
             }
         }
+
+        public void Flush() => _instance = null;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
