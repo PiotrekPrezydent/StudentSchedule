@@ -60,14 +60,14 @@ namespace StudentScheduleClient.AdminPages
         void AddButton_Click(object sender, RoutedEventArgs e)
         {
             Program entity = new(_repository.GetAll().Last().Id + 1, null);
-            var editWindow = new EditPopup(typeof(Program), entity, e => _repository.Add((Program)e))
+            var editWindow = new EditPopup(typeof(Program), entity, e => _repository.Add((Program)e), true)
             {
                 Owner = Window.GetWindow(this)
             };
             bool? result = editWindow.ShowDialog();
             if (result == true)
             {
-                MessageBox.Show($"added new entity with id: {_repository.GetAll().Last().Id + 1}");
+                MessageBox.Show($"added new entity with id: {_repository.GetAll().Last().Id}");
             }
             Entities.ItemsSource = _repository.GetAll();
         }

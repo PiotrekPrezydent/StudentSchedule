@@ -73,7 +73,7 @@ namespace StudentScheduleClient.AdminPages
         void AddButton_Click(object sender, RoutedEventArgs e)
         {
             StudentProgram entity = new(1, 1);
-            var editWindow = new EditPopup(typeof(StudentProgram), entity, e => _repository.Add((StudentProgram)e))
+            var editWindow = new EditPopup(typeof(StudentProgram), entity, e => _repository.Add((StudentProgram)e), true)
             {
                 Owner = Window.GetWindow(this)
             };

@@ -16,13 +16,14 @@ namespace StudentScheduleClient.Windows
         Func<object,bool> _onSave;
         List<KeyValuePair<Type, TextBox>> _constructorParametersWithArguments;
         Type _targetedType;
-        public EditPopup(Type entityType,object ob, Func<object,bool> onSave)
+        bool _ignoreIdParam;
+        public EditPopup(Type entityType,object ob, Func<object,bool> onSave,bool ignoreIdParam = false)
         {
             InitializeComponent();
             _onSave = onSave;
             _constructorParametersWithArguments = new();
             _targetedType = entityType;
-
+            _ignoreIdParam = ignoreIdParam;
             var simpleProperties = entityType.GetProperties().Where(p => p.PropertyType == typeof(string) || p.PropertyType.IsValueType);
             foreach (var property in simpleProperties)
                 AddEditablePropertyWithUsedValue(property, ob);
@@ -66,9 +67,11 @@ namespace StudentScheduleClient.Windows
                 IsReadOnly = name == "Id" ? true : false,
                 Background = name == "Id" ? Brushes.LightGray : Brushes.White,
             };
-
-            KeyValuePair<Type, TextBox> parameters = new(property.PropertyType, textBox);
-            _constructorParametersWithArguments.Add(parameters);
+            if(!_ignoreIdParam || name != "Id")
+            {
+                KeyValuePair<Type, TextBox> parameters = new(property.PropertyType, textBox);
+                _constructorParametersWithArguments.Add(parameters);
+            }
 
             Grid.SetColumn(textBox, 3);
             grid.Children.Add(textBox);

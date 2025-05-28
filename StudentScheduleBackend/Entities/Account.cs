@@ -20,6 +20,13 @@
             Password = password;
         }
 
+        public Account(int studentId, string login, string password)
+        {
+            StudentId = studentId;
+            Login = login;
+            Password = password;
+        }
+
         public override string ToString() => $"{Id}\t{StudentId}\t{Login}\t{Password}";
     }
 

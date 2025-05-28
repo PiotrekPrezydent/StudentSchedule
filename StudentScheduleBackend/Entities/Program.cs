@@ -16,6 +16,11 @@
             Name = name;
         }
 
+        public Program(string name)
+        {
+            Name = name;
+        }
+
         public override string ToString() => $"{Id}\t{Name}";
     }
 

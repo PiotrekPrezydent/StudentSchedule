@@ -1,19 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using StudentScheduleBackend.Entities;
-using StudentScheduleBackend.Interfaces;
 using StudentScheduleBackend.Repositories;
 using StudentScheduleClient.Windows;
 
@@ -73,14 +60,14 @@ namespace StudentScheduleClient.AdminPages
         void AddButton_Click(object sender, RoutedEventArgs e)
         {
             Subject entity = new(_repository.GetAll().Last().Id + 1, null);
-            var editWindow = new EditPopup(typeof(Subject), entity, e => _repository.Add((Subject)e))
+            var editWindow = new EditPopup(typeof(Subject), entity, e => _repository.Add((Subject)e),true)
             {
                 Owner = Window.GetWindow(this)
             };
             bool? result = editWindow.ShowDialog();
             if (result == true)
             {
-                MessageBox.Show($"added new entity with id: {_repository.GetAll().Last().Id + 1}");
+                MessageBox.Show($"added new entity with id: {_repository.GetAll().Last().Id}");
             }
             Entities.ItemsSource = _repository.GetAll();
         }

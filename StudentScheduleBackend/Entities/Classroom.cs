@@ -17,6 +17,12 @@
             RoomNumber = roomNumber;
         }
 
+        public Classroom(string building, string roomNumber)
+        {
+            Building = building;
+            RoomNumber = roomNumber;
+        }
+
         public override string ToString() => $"{Id}\t{Building}\t{RoomNumber}";
     }
 }
