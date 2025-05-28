@@ -21,9 +21,9 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ID" Width="40" DisplayMemberBinding="{Binding Id}" />
-                    <GridViewColumn Header="StudentId" Width="70" DisplayMemberBinding="{Binding StudentId}" />
                     <GridViewColumn Header="Login" Width="100" DisplayMemberBinding="{Binding Login}" />
                     <GridViewColumn Header="Password" Width="200" DisplayMemberBinding="{Binding Password}" />
+                    <GridViewColumn Header="IsAdmin" Width="100" DisplayMemberBinding="{Binding IsAdmin}" />
                     <GridViewColumn Header="">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

@@ -89,7 +89,7 @@ namespace StudentScheduleClient.AdminPages
         }
         void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            Account entity = new(_repository.GetAll().Last().Id+1,0,null,null);
+            Account entity = new(_repository.GetAll().Last().Id+1,null,null,false);
             var editWindow = new EditPopup(typeof(Account), entity, e => _repository.Add((Account)e), true)
             {
                 Owner = Window.GetWindow(this)

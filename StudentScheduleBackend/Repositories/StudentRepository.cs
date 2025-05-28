@@ -12,6 +12,8 @@ namespace StudentScheduleBackend.Repositories
 
         public bool Add(Student student)
         {
+            if(!_context.Accounts.Any(e=>e.Id == student.AccountId))
+                throw new KeyNotFoundException($"Account with id:{student.AccountId} could not be found.");
             _context.Students.Add(student);
             return _context.SaveChanges() > 0;
         }
@@ -31,6 +33,9 @@ namespace StudentScheduleBackend.Repositories
             if(!_context.Students.Any(e=>e.Id == student.Id))
                 throw new KeyNotFoundException($"Student with id:{student.Id} could not be found.");
 
+            if (!_context.Accounts.Any(e => e.Id == student.AccountId))
+                throw new KeyNotFoundException($"Account with id:{student.AccountId} could not be found.");
+
             _context.ChangeTracker.Clear();
             _context.Students.Update(student);
             return _context.SaveChanges() > 0;
@@ -41,9 +46,6 @@ namespace StudentScheduleBackend.Repositories
             var student = _context.Students.Find(id);
             if (student == null)
                 throw new KeyNotFoundException($"Student with id:{id} could not be found.");
-
-            if (!_context.Accounts.Any(a => a.StudentId == student.Id))
-                throw new ReferentialIntegrityException($"Cannot delete program with {id} becouse it is assigned to one or more accounts.");
 
             _context.ChangeTracker.Clear();
             _context.Students.Remove(student);

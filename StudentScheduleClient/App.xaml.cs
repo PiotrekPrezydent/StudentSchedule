@@ -15,8 +15,9 @@ namespace StudentScheduleClient
         public static Context DBContext;
         public static Student CurrentStudent;
 
-        public static void StartStudentSession(LoginWindow instance)
+        public static void StartStudentSession(LoginWindow instance,Student currentStudent)
         {
+            CurrentStudent = currentStudent;
             StudentWindow window = new();
             window.Show();
             instance.Close();

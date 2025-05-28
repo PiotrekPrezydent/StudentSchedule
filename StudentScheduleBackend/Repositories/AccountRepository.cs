@@ -12,9 +12,6 @@ namespace StudentScheduleBackend.Repositories
 
         public bool Add(Account account)
         {
-            if (!_context.Students.Any(e => e.Id == account.StudentId))
-                throw new ForeignKeyNotFoundException($"Student with ID {account.StudentId} does not exist.");
-
             _context.Accounts.Add(account);
             return _context.SaveChanges() > 0;
         }
@@ -34,9 +31,6 @@ namespace StudentScheduleBackend.Repositories
             if(!_context.Accounts.Any(e=>e.Id == account.Id))
                 throw new KeyNotFoundException($"Account with id:{account.Id} could not be found.");
 
-            if (!_context.Students.Any(e => e.Id == account.StudentId))
-                throw new ForeignKeyNotFoundException($"Student with ID {account.StudentId} does not exist.");
-
             _context.ChangeTracker.Clear();
             _context.Accounts.Update(account);
             return _context.SaveChanges() > 0;
@@ -47,6 +41,9 @@ namespace StudentScheduleBackend.Repositories
             var account = _context.Accounts.Find(id);
             if (account == null)
                 throw new KeyNotFoundException($"Account with id:{id} could not be found.");
+
+            if(_context.Students.Any(e=>e.AccountId == account.Id))
+                throw new ReferentialIntegrityException($"cannot delete account with {id} becouse it is assigned to student");
 
             _context.ChangeTracker.Clear();
             _context.Accounts.Remove(account);

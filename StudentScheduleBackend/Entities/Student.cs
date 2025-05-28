@@ -7,27 +7,31 @@
         public string LastName { get; set; }
         public string IndexNumber { get; set; }
 
+        public int AccountId { get; set; }
+
         public Account Account { get; set; }
 
         public ICollection<StudentProgram> StudentPrograms { get; set; }
 
         public Student() { }
 
-        public Student(int id, string firstName, string lastName, string indexNumber)
+        public Student(int id, string firstName, string lastName, string indexNumber, int accountId)
         {
             Id = id;
             FirstName = firstName;
             LastName = lastName;
             IndexNumber = indexNumber;
+            AccountId = accountId;
         }
 
-        public Student(string firstName, string lastName, string indexNumber)
+        public Student(string firstName, string lastName, string indexNumber, int accountId)
         {
             FirstName = firstName;
             LastName = lastName;
             IndexNumber = indexNumber;
+            AccountId = accountId;
         }
 
-        public override string ToString() => $"{Id}\t{FirstName}\t{LastName}\t{IndexNumber}";
+        public override string ToString() => $"{Id}\t{FirstName}\t{LastName}\t{IndexNumber}\t{AccountId}";
     }
 }

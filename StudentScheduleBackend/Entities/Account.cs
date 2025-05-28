@@ -3,31 +3,32 @@
     public class Account
     {
         public int Id { get; set; }
-        public int StudentId { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+
+        public bool IsAdmin { get; set; }
 
         public Student Student { get; set; }
 
         //ef constructor
         public Account() { }
 
-        public Account(int id, int studentId, string login, string password)
+        public Account(int id, string login, string password, bool isAdmin)
         {
             Id = id;
-            StudentId = studentId;
             Login = login;
             Password = password;
+            IsAdmin = isAdmin;
         }
 
-        public Account(int studentId, string login, string password)
+        public Account(string login, string password, bool isAdmin)
         {
-            StudentId = studentId;
             Login = login;
             Password = password;
+            IsAdmin = isAdmin;
         }
 
-        public override string ToString() => $"{Id}\t{StudentId}\t{Login}\t{Password}";
+        public override string ToString() => $"{Id}\t{Login}\t{Password}\t{IsAdmin}";
     }
 
 }

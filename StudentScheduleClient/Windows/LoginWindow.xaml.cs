@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Reflection;
+using System.Windows;
 using StudentScheduleBackend;
 using StudentScheduleBackend.Entities;
 using StudentScheduleBackend.Repositories;
@@ -17,71 +19,39 @@ namespace StudentScheduleClient
 
         void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            var cancelToken = new CancellationTokenSource();
             var login = LoginBox.Text;
             var password = PasswordBox.Text;
 
-#if DEBUG
-            if (login == "ADMIN" && password == "ADMIN")
+            string exeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
+            string configPath = Path.Combine(exeFolder, "AppSettings.json");
+            string connectionString = "";
+            try
             {
-                cancelToken.Cancel();
-                App.StartAdminSession(this);
+                connectionString = Context.BuildConnectionString(configPath,login,password, out int id);
                 if (App.DBContext == null)
-                    App.DBContext = Context.Initialize(null, false);
-                return;
-            }
-#endif
-            if (App.DBContext == null)
-                App.DBContext = Context.Initialize(null, false);
-            ShowLoadingText();
+                    App.DBContext = Context.Initialize(connectionString);
 
-
-            AccountRepository ac = new(App.DBContext);
-
-            bool logged = false;
-            Account acc;
-            //try
-            //{
-                acc = ac.GetAll().FirstOrDefault(e => e.Login == login && e.Password == password);
-                logged = !EqualityComparer<Account>.Default.Equals(acc, default(Account));
-            //}
-            //catch(Exception ex)
-            //{
-            //    cancelToken.Cancel();
-            //    ErrorMessage.Text = $"{ex}";
-            //    MessageBox.Show(ex.ToString());
-            //    return;
-            //}
-
-            if (logged)
-            {
-                cancelToken.Cancel();
-                App.CurrentStudent = acc.Student;
-                App.StartStudentSession(this);
-            }
-            else
-            {
-                cancelToken.Cancel();
-                ErrorMessage.Text = $"Zły login lub hasło";
-            }
-
-            async Task ShowLoadingText()
-            {
-                while (true)
+                AccountRepository ar = new(App.DBContext);
+                Account acc = ar.GetById(id);
+                if (acc.IsAdmin)
                 {
-                    cancelToken.Token.ThrowIfCancellationRequested();
-                    ErrorMessage.Text = "TRWA ŁĄCZENIE";
-                    for (int i = 0; i < 3; i++)
+                    App.StartAdminSession(this);
+                }
+                else
+                {
+                    if(acc.Student == null)
                     {
-                        cancelToken.Token.ThrowIfCancellationRequested();
-                        ErrorMessage.Text += ".";
-                        await Task.Delay(1000, cancelToken.Token);
+                        ErrorMessage.Text = $"Konto {acc.Id} nie ma powiązanego studenta, i niejest administratorem";
+                        return;
                     }
+                    App.StartStudentSession(this, acc.Student);
                 }
             }
-
+            catch (Exception ex)
+            {
+                ErrorMessage.Text = $"Zły login lub hasło";
+                MessageBox.Show(ex.ToString());
+            }
         }
-
-
     }
 }
