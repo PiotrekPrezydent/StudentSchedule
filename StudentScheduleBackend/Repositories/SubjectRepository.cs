@@ -28,6 +28,10 @@ namespace StudentScheduleBackend.Repositories
 
         public bool Update(Subject subject)
         {
+            if(!_context.Subjects.Any(e=>e.Id == subject.Id))
+                throw new KeyNotFoundException($"Subject with id:{subject.Id} could not be found.");
+
+            _context.ChangeTracker.Clear();
             _context.Subjects.Update(subject);
             return _context.SaveChanges() > 0;
         }

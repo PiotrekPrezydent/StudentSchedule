@@ -13,8 +13,9 @@
 
         public Student() { }
 
-        public Student(string firstName, string lastName, string indexNumber)
+        public Student(int id, string firstName, string lastName, string indexNumber)
         {
+            Id = id;
             FirstName = firstName;
             LastName = lastName;
             IndexNumber = indexNumber;

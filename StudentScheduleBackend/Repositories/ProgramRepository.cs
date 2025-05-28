@@ -29,6 +29,10 @@ namespace StudentScheduleBackend.Repositories
 
         public bool Update(Program program)
         {
+            if(!_context.Programs.Any(e=>e.Id == program.Id))
+                throw new KeyNotFoundException($"Program with id:{program.Id} could not be found.");
+
+            _context.ChangeTracker.Clear();
             _context.Programs.Update(program);
             return _context.SaveChanges() > 0;
         }

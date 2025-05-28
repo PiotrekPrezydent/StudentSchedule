@@ -9,8 +9,9 @@
 
         public Subject() { }
 
-        public Subject(string name)
+        public Subject(int id, string name)
         {
+            Id = id;
             Name = name;
         }
 

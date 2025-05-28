@@ -69,5 +69,20 @@ namespace StudentScheduleClient.AdminPages
                 Entities.ItemsSource = _repository.GetAll();
             }
         }
+
+        void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            StudentProgram entity = new(1, 1);
+            var editWindow = new EditPopup(typeof(StudentProgram), entity, e => _repository.Add((StudentProgram)e))
+            {
+                Owner = Window.GetWindow(this)
+            };
+            bool? result = editWindow.ShowDialog();
+            if (result == true)
+            {
+                MessageBox.Show($"added new connection for student and program");
+            }
+            Entities.ItemsSource = _repository.GetAll();
+        }
     }
 }

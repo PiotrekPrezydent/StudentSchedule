@@ -31,6 +31,9 @@ namespace StudentScheduleBackend.Repositories
 
         public bool Update(Account account)
         {
+            if(!_context.Accounts.Any(e=>e.Id == account.Id))
+                throw new KeyNotFoundException($"Account with id:{account.Id} could not be found.");
+
             if (!_context.Students.Any(e => e.Id == account.StudentId))
                 throw new ForeignKeyNotFoundException($"Student with ID {account.StudentId} does not exist.");
 
@@ -44,6 +47,7 @@ namespace StudentScheduleBackend.Repositories
             if (account == null)
                 throw new KeyNotFoundException($"Account with id:{id} could not be found.");
 
+            _context.ChangeTracker.Clear();
             _context.Accounts.Remove(account);
             return _context.SaveChanges() > 0;
         }

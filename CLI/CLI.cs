@@ -1,4 +1,6 @@
-﻿using StudentScheduleBackend;
+﻿using Microsoft.EntityFrameworkCore;
+using StudentScheduleBackend;
+using StudentScheduleBackend.Entities;
 using StudentScheduleBackend.Repositories;
 
 namespace CLI
@@ -10,22 +12,8 @@ namespace CLI
             Console.WriteLine("hello world");
 
             Context c = Context.Initialize(null);
-            AccountRepository ac = new(c);;
-            var a = ac.GetAll();
-            var st = a[0];
-
-            StudentProgramRepository spr = new(c);
-            var programs = spr.GetAll().Where(e => e.StudentId == st.Id).Select(e => e.Program);
-
-            ClassRepository cr = new(c);
-
-            var cl = cr.GetAll().Where(e => programs.Any(p => p.Id == e.ProgramId));
-            Console.WriteLine($"student {st} ma zajęcia:");
-
-            foreach(var cla in cl)
-            {
-                Console.WriteLine(cla);
-            }
+            var key = c.Model.FindEntityType(typeof(Subject)).FindPrimaryKey();
+            Console.WriteLine(key);
 
             Console.Read();
         }

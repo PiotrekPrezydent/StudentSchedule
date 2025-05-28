@@ -9,6 +9,12 @@
       Title="AdminAccountPage">
 
     <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
         <ListView x:Name="Entities">
             <ListView.View>
                 <GridView>
@@ -35,5 +41,11 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button
+            Grid.Row="2"
+            Content="Add" Margin="2"
+            Click="AddButton_Click"
+            Tag="{Binding}"
+           />
     </Grid>
 </Page>

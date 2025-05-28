@@ -61,17 +61,14 @@ namespace StudentScheduleClient.Windows
 
             var textBox = new TextBox
             {
-                Text = $"{value!.ToString()}",
+                Text = value?.ToString() ?? "",
                 VerticalAlignment = VerticalAlignment.Center,
                 IsReadOnly = name == "Id" ? true : false,
                 Background = name == "Id" ? Brushes.LightGray : Brushes.White,
             };
 
-            if (!textBox.IsReadOnly)
-            {
-                KeyValuePair<Type, TextBox> parameters = new(property.PropertyType, textBox);
-                _constructorParametersWithArguments.Add(parameters);
-            }
+            KeyValuePair<Type, TextBox> parameters = new(property.PropertyType, textBox);
+            _constructorParametersWithArguments.Add(parameters);
 
             Grid.SetColumn(textBox, 3);
             grid.Children.Add(textBox);

@@ -29,6 +29,10 @@ namespace StudentScheduleBackend.Repositories
 
         public bool Update(Classroom classroom)
         {
+            if(!_context.Classrooms.Any(e=>e.Id == classroom.Id))
+                throw new KeyNotFoundException($"Classroom with id:{classroom.Id} could not be found.");
+
+            _context.ChangeTracker.Clear();
             _context.Classrooms.Update(classroom);
             return _context.SaveChanges() > 0;
         }

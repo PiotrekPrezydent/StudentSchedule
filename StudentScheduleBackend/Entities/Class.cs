@@ -17,8 +17,9 @@
         //EF constructor
         public Class() { }
 
-        public Class(int programId, int subjectId, int year, string weekday, int? classroomId, TimeSpan? startTime, TimeSpan? endTime)
+        public Class(int id, int programId, int subjectId, int year, string weekday, int? classroomId, TimeSpan? startTime, TimeSpan? endTime)
         {
+            Id = id;
             ProgramId = programId;
             SubjectId = subjectId;
             Year = year;

@@ -12,8 +12,9 @@
         //ef constructor
         public Account() { }
 
-        public Account(int studentId, string login, string password)
+        public Account(int id, int studentId, string login, string password)
         {
+            Id = id;
             StudentId = studentId;
             Login = login;
             Password = password;

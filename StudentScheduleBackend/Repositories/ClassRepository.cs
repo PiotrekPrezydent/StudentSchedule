@@ -45,6 +45,9 @@ namespace StudentScheduleBackend.Repositories
 
         public bool Update(Class @class)
         {
+            if(!_context.Classes.Any(e=>e.Id == @class.Id))
+                throw new KeyNotFoundException($"Class with id:{@class.Id} could not be found.");
+
             if (!_context.Programs.Any(e => e.Id == @class.ProgramId))
                 throw new ForeignKeyNotFoundException($"Program with ID {@class.ProgramId} does not exist.");
 
@@ -54,6 +57,7 @@ namespace StudentScheduleBackend.Repositories
             if (_context.Subjects.Any(e => e.Id == @class.SubjectId))
                 throw new ForeignKeyNotFoundException($"Subject with ID {@class.SubjectId} does not exist.");
 
+            _context.ChangeTracker.Clear();
             _context.Classes.Update(@class);
             return _context.SaveChanges() > 0;
         }

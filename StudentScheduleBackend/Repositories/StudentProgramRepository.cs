@@ -53,6 +53,7 @@ namespace StudentScheduleBackend.Repositories
             if (!_context.Programs.Any(e => e.Id == sp.ProgramId))
                 throw new ForeignKeyNotFoundException($"Program with ID {sp.ProgramId} does not exist.");
 
+            _context.ChangeTracker.Clear();
             _context.StudentPrograms.Update(sp);
             return _context.SaveChanges() > 0;
         }
