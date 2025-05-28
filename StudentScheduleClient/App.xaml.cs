@@ -17,9 +17,10 @@ namespace StudentScheduleClient
     {
         public static Context DBContext;
         public static Student CurrentStudent;
-#if DEBUG
+
         protected override void OnStartup(StartupEventArgs e)
         {
+#if DEBUG
             base.OnStartup(e);
 
             // Create DbContext with your debug connection string
@@ -36,8 +37,9 @@ namespace StudentScheduleClient
 
                 Seeder.SeedAllFromJson(context, seedFolder);
             }
-       }
 #endif
+        }
+
 
         public static void StartStudentSession(LoginWindow instance,Student currentStudent)
         {
