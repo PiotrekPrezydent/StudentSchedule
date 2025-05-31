@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations;
-using StudentScheduleBackend;
+﻿using StudentScheduleBackend;
 using StudentScheduleBackend.Entities;
 using StudentScheduleBackend.Repositories;
 

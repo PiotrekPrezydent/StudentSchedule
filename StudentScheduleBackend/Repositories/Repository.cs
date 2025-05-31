@@ -128,6 +128,5 @@ namespace StudentScheduleBackend.Repositories
             _context.Set<T>().Remove(entity);
             return _context.SaveChanges() > 0;
         }
-
     }
 }

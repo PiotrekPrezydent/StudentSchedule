@@ -10,8 +10,12 @@
         {
             string msg = this.GetType().Name;
             foreach(var p in this.GetType().GetProperties())
+            {
+                //this might cose infinity loop
+                if (typeof(Entity).IsAssignableFrom(p.PropertyType))
+                    continue;
                 msg += "\t" + p.Name + " = " + p.GetValue(this);
-
+            }
             msg += "\n";
             return msg;
         }
