@@ -1,31 +1,35 @@
 ﻿using System.Text.Json.Serialization;
+using StudentScheduleBackend.Attributes;
 
 namespace StudentScheduleBackend.Entities
 {
-    public class Class
+    public class Class : Entity
     {
-        public int Id { get; set; }
+        [ForeignKeyOf(typeof(Program))]
         public int ProgramId { get; set; }
+
+        [ForeignKeyOf(typeof(Subject))]
         public int SubjectId { get; set; }
+
         public int Year { get; set; }
         public string Weekday { get; set; }
+
+        [ForeignKeyOf(typeof(Classroom))]
         public int? ClassroomId { get; set; }
-        public TimeSpan? StartTime { get; set; }
-        public TimeSpan? EndTime { get; set; }
+
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
 
         [JsonIgnore]
-        public Program Program { get; set; }
+        public Program? Program { get; set; }
 
         [JsonIgnore]
-        public Subject Subject { get; set; }
+        public Subject? Subject { get; set; }
 
         [JsonIgnore]
-        public Classroom Classroom { get; set; }
+        public Classroom? Classroom { get; set; }
 
-        //EF constructor
-        public Class() { }
-
-        public Class(int id, int programId, int subjectId, int year, string weekday, int? classroomId, TimeSpan? startTime, TimeSpan? endTime)
+        public Class(int id, int programId, int subjectId, int year, string weekday, int classroomId, TimeSpan startTime, TimeSpan endTime)
         {
             Id = id;
             ProgramId = programId;
@@ -37,7 +41,7 @@ namespace StudentScheduleBackend.Entities
             EndTime = endTime;
         }
 
-        public Class(int programId, int subjectId, int year, string weekday, int? classroomId, TimeSpan? startTime, TimeSpan? endTime)
+        public Class(int programId, int subjectId, int year, string weekday, int classroomId, TimeSpan startTime, TimeSpan endTime)
         {
             ProgramId = programId;
             SubjectId = subjectId;
@@ -47,7 +51,5 @@ namespace StudentScheduleBackend.Entities
             StartTime = startTime;
             EndTime = endTime;
         }
-
-        public override string ToString() => $"{Id}\t{ProgramId}\t{SubjectId}\t{Year}\t{Weekday}\t{ClassroomId}\t{StartTime}\t{EndTime}";
     }
 }

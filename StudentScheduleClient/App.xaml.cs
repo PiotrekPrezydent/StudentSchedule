@@ -30,12 +30,12 @@ namespace StudentScheduleClient
 
             using (var context = new Context(options))
             {
-                context.Database.EnsureDeleted();
-                context.Database.Migrate();
+               // context.Database.EnsureDeleted();
+               // context.Database.Migrate();
 
                 string seedFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "seed");
 
-                Seeder.SeedAllFromJson(context, seedFolder);
+                //Seeder.SeedAllFromJson(context, seedFolder);
             }
 #endif
         }

@@ -2,19 +2,16 @@
 
 namespace StudentScheduleBackend.Entities
 {
-    public class Account
+    public class Account : Entity
     {
-        public int Id { get; set; }
         public string Login { get; set; }
+
         public string Password { get; set; }
 
         public bool IsAdmin { get; set; }
 
         [JsonIgnore]
-        public Student Student { get; set; }
-
-        //ef constructor
-        public Account() { }
+        public Student? Student { get; set; }
 
         public Account(int id, string login, string password, bool isAdmin)
         {
@@ -30,8 +27,6 @@ namespace StudentScheduleBackend.Entities
             Password = password;
             IsAdmin = isAdmin;
         }
-
-        public override string ToString() => $"{Id}\t{Login}\t{Password}\t{IsAdmin}";
     }
 
 }

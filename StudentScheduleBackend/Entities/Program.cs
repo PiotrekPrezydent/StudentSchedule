@@ -2,18 +2,15 @@
 
 namespace StudentScheduleBackend.Entities
 {
-    public class Program
+    public class Program : Entity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
 
         [JsonIgnore]
-        public ICollection<StudentProgram> StudentPrograms { get; set; }
+        public ICollection<StudentProgram>? StudentPrograms { get; set; }
 
         [JsonIgnore]
-        public ICollection<Class> Classes { get; set; }
-
-        public Program() { }
+        public ICollection<Class>? Classes { get; set; }
 
         public Program(int id, string name)
         {
@@ -25,8 +22,5 @@ namespace StudentScheduleBackend.Entities
         {
             Name = name;
         }
-
-        public override string ToString() => $"{Id}\t{Name}";
     }
-
 }

@@ -2,16 +2,13 @@
 
 namespace StudentScheduleBackend.Entities
 {
-    public class Classroom
+    public class Classroom : Entity
     {
-        public int Id { get; set; }
         public string Building { get; set; }
         public string RoomNumber { get; set; }
 
         [JsonIgnore]
-        public ICollection<Class> Classes { get; set; }
-
-        public Classroom() { }
+        public ICollection<Class>? Classes { get; set; }
 
         public Classroom(int id, string building, string roomNumber)
         {
@@ -25,7 +22,5 @@ namespace StudentScheduleBackend.Entities
             Building = building;
             RoomNumber = roomNumber;
         }
-
-        public override string ToString() => $"{Id}\t{Building}\t{RoomNumber}";
     }
 }

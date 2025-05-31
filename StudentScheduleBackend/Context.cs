@@ -38,13 +38,39 @@ namespace StudentScheduleBackend
         //lock singleton from multi-thearding creations of same object
         static readonly object _lock = new();
 
-        internal DbSet<Student> Students { get; set; }
-        internal DbSet<Account> Accounts { get; set; }
-        internal DbSet<Program> Programs { get; set; }
-        internal DbSet<StudentProgram> StudentPrograms { get; set; }
-        internal DbSet<Class> Classes { get; set; }
-        internal DbSet<Classroom> Classrooms { get; set; }
-        internal DbSet<Subject> Subjects { get; set; }
+        DbSet<Student> _students { get; set; }
+        DbSet<Account> _accounts { get; set; }
+        DbSet<Program> _programs { get; set; }
+        DbSet<StudentProgram> _studentPrograms { get; set; }
+        DbSet<Class> _classes { get; set; }
+        DbSet<Classroom> _classrooms { get; set; }
+        DbSet<Subject> _subjects { get; set; }
+
+        internal IReadOnlyList<Entity> GetEntitiesByType(Type t)
+        {
+            if (t == typeof(Student))
+                return _students.ToList();
+
+            if (t == typeof(Account))
+                return _accounts.ToList();
+
+            if (t == typeof(Program))
+                return _programs.ToList();
+
+            if (t == typeof(StudentProgram))
+                return _studentPrograms.ToList();
+
+            if (t == typeof(Class))
+                return _classes.ToList();
+
+            if (t == typeof(Classroom))
+                return _classrooms.ToList();
+
+            if (t == typeof(Subject))
+                return _subjects.ToList();
+
+            throw new ArgumentException($"Unsupported entity type: {t.Name}");
+        }
 
         public static Context Initialize(string connectionString)
         {
@@ -81,7 +107,7 @@ namespace StudentScheduleBackend
             optionsBuilder.UseSqlServer(readAccountsConnection);
             var c = new Context(optionsBuilder.Options);
 
-            var account = c.Accounts.FirstOrDefault(a => a.Login == login && a.Password == password);
+            var account = c._accounts.FirstOrDefault(a => a.Login == login && a.Password == password);
 
             if (account == null)
                 throw new Exception("Login or password incorrect.");
