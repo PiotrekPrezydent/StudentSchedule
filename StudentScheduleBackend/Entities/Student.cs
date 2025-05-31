@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace StudentScheduleBackend.Entities
 {
+    [Table("Students")]
     public class Student : Entity
     {
         public string FirstName { get; set; }

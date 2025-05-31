@@ -1,7 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace StudentScheduleBackend.Entities
 {
+    [Table("Programs")]
     public class Program : Entity
     {
         public string Name { get; set; }

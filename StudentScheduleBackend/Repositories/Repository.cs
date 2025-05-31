@@ -6,7 +6,7 @@ using StudentScheduleBackend.Exceptions;
 namespace StudentScheduleBackend.Repositories
 {
     //fully automatised crud with validation for every entity :)
-    class Repository<T> where T : Entity
+    public class Repository<T> where T : Entity
     {
         readonly Context _context;
 

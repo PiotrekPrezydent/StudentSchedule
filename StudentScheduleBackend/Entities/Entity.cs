@@ -5,9 +5,6 @@
         //all entities has to have id for them
         public int Id { get; protected set; }
 
-        //EF constructor
-        public Entity() { }
-
         //base ToString for all entities it will return entity type name + (name = value) for all properties
         public override string ToString()
         {
@@ -18,6 +15,5 @@
             msg += "\n";
             return msg;
         }
-
     }
 }

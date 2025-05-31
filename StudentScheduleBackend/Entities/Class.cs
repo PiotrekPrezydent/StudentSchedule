@@ -1,8 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using StudentScheduleBackend.Attributes;
 
 namespace StudentScheduleBackend.Entities
 {
+    [Table("Classes")]
     public class Class : Entity
     {
         [ForeignKeyOf(typeof(Program))]
@@ -15,7 +17,7 @@ namespace StudentScheduleBackend.Entities
         public string Weekday { get; set; }
 
         [ForeignKeyOf(typeof(Classroom))]
-        public int? ClassroomId { get; set; }
+        public int ClassroomId { get; set; }
 
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
