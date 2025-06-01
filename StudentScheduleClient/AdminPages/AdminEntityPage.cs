@@ -1,32 +1,78 @@
-﻿using StudentScheduleBackend.Entities;
+﻿using System.Windows;
+using StudentScheduleBackend.Entities;
+using StudentScheduleBackend.Extensions;
 using StudentScheduleBackend.Repositories;
+using StudentScheduleClient.Popups;
 
 namespace StudentScheduleClient.AdminPages
 {
     class AdminEntityPage<T> : BaseAdminPage where T : Entity 
     {
         Repository<T> _repository;
+        List<KeyValuePair<string, string>> _filters;
+
         public AdminEntityPage() : base(typeof(T))
         {
             _repository = new(App.DBContext);
-            _entities = _repository.GetAll().Cast<Entity>().ToList();
-            //temp
-            Entities.ItemsSource = _entities;
+            Entities.ItemsSource = _repository.GetAll();
+            _filters = new();
         }
 
-        protected override bool OnAdd(object o)
+        //td create object form kvp and find
+        protected override void OnEdit()
         {
-            throw new NotImplementedException();
+            if (_btnContext == null)
+                return;
+
+            var popup = new ShowColumnsPopup(typeof(T), PopupType.Edit, _btnContext.GetColumnsWithValues());
+            popup.Owner = Window.GetWindow(this);
+
+            bool? result = popup.ShowDialog();
+            var kvps = popup.ReadedValues;
+
+            Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
         }
 
-        protected override bool OnDelete(object o)
+        protected override void OnDelete()
         {
-            throw new NotImplementedException();
+            if (_btnContext == null)
+                return;
+            try
+            {
+                _repository.Delete(_btnContext.Id);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
         }
 
-        protected override bool OnEdit(object o)
+        //td create object from kvp
+        protected override void OnAdd()
         {
-            throw new NotImplementedException();
+            var popup = new ShowColumnsPopup(typeof(T),PopupType.Add,new List<KeyValuePair<string, string>> { new("Id", (_repository.GetAll().Last().Id+1).ToString() ) });
+            popup.Owner = Window.GetWindow(this);
+
+            bool? result = popup.ShowDialog();
+            var kvps = popup.ReadedValues;
+
+            Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
+        }
+
+        //show filters
+        protected override void OnFilter()
+        {
+            var popup = new ShowColumnsPopup(typeof(T), PopupType.Filter,_filters);
+            popup.Owner = Window.GetWindow(this);
+
+            bool? result = popup.ShowDialog();
+            var kvps = popup.ReadedValues;
+
+            _filters = kvps;
+
+            Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
         }
     }
 }

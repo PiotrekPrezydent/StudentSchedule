@@ -27,32 +27,32 @@ namespace StudentScheduleClient.Windows
 
         void ClassBTN_Click(object sender, RoutedEventArgs e)
         {
-            //MainFrame.Navigate(new AdminClassPage());
+            MainFrame.Navigate(new AdminEntityPage<Class>());
         }
 
         void ClassroomBTN_Click(object sender, RoutedEventArgs e)
         {
-            //MainFrame.Navigate(new AdminClassroomPage());
+            MainFrame.Navigate(new AdminEntityPage<Classroom>());
         }
 
         void ProgramBTN_Click(object sender, RoutedEventArgs e)
         {
-            //MainFrame.Navigate(new AdminProgramPage());
+            MainFrame.Navigate(new AdminEntityPage<Program>());
         }
 
         void StudentBTN_Click(object sender, RoutedEventArgs e)
         {
-            //MainFrame.Navigate(new AdminStudentPage());
+            MainFrame.Navigate(new AdminEntityPage<Student>());
         }
 
         void StudentProgramBTN_Click(object sender, RoutedEventArgs e)
         {
-            //MainFrame.Navigate(new AdminStudentProgramPage());
+            MainFrame.Navigate(new AdminEntityPage<StudentProgram>()); ;
         }
 
         void SubjectBTN_Click(object sender, RoutedEventArgs e)
         {
-            //MainFrame.Navigate(new AdminSubjectPage());
+            MainFrame.Navigate(new AdminEntityPage<Subject>());
         }
     }
 }

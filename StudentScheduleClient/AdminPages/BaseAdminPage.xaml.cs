@@ -17,10 +17,8 @@ namespace StudentScheduleClient.AdminPages
     /// </summary>
     public abstract partial class BaseAdminPage : Page
     {
-        protected List<KeyValuePair<string, object>> _filters;
-        protected List<Entity> _entities;
-
         Type _pageType;
+        protected Entity? _btnContext; 
 
         protected BaseAdminPage(Type t)
         {
@@ -30,12 +28,13 @@ namespace StudentScheduleClient.AdminPages
             InitializeComponent();
             DataContext = this;
             _pageType = t;
-            _filters = new();
-            _entities = new();
             int i = 1;
             foreach(var prop in _pageType.GetProperties())
             {
                 if (typeof(Entity).IsAssignableFrom(prop.PropertyType))
+                    continue;
+
+                if (prop.Name == "Id")
                     continue;
 
                 var newColumn = new GridViewColumn
@@ -49,79 +48,34 @@ namespace StudentScheduleClient.AdminPages
             }
         }
 
-        protected abstract bool OnEdit(object o);
+        protected abstract void OnEdit();
 
-        protected abstract bool OnAdd(object o);
+        protected abstract void OnDelete();
 
-        protected abstract bool OnDelete(object o);
+        protected abstract void OnAdd();
+
+        protected abstract void OnFilter();
 
         void EditButton_Click(object sender, RoutedEventArgs e)
         {
             if (!(sender is Button btn) || !(_pageType.IsInstanceOfType(btn.Tag)))
                 return;
-            var entity = btn.Tag as Entity;
+            _btnContext = btn.Tag as Entity;
 
-            if (entity == null)
-                return;
-
-            var editWindow = new EditPopup(_pageType, entity, OnEdit);
-            editWindow.Owner = Window.GetWindow(this);
-
-            bool? result = editWindow.ShowDialog();
-
-            if (result == true)
-                MessageBox.Show($"Saved changes for {_pageType.Name}: {entity.Id}");
-
-            Entities.ItemsSource = _entities.PanDa5ZaTenSuperFilter(_filters);
+            OnEdit();
         }
 
         void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (!(sender is Button btn) || !(_pageType.IsInstanceOfType(btn.Tag)))
                 return;
-            var entity = btn.Tag as Entity;
+            _btnContext = btn.Tag as Entity;
 
-            if (entity == null)
-                return;
-
-            try
-            {
-                OnDelete(entity);
-                MessageBox.Show($"Removed {_pageType.Name} with id: {entity.Id}");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error when trying to delete:\n{ex.Message}");
-            }
-            finally
-            {
-                Entities.ItemsSource = _entities.PanDa5ZaTenSuperFilter(_filters);
-            }
-        }
-        //WIP
-        void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            //if (!(sender is Button btn) || !(_pageType.IsInstanceOfType(btn.Tag)))
-            //    return;
-
-            //var entity = btn.Tag as Entity;
-
-            //if (entity == null)
-            //    return;
-
-            //var editWindow = new EditPopup(_pageType, entity, OnAdd,true);
-            //editWindow.Owner = Window.GetWindow(this);
-            //bool? result = editWindow.ShowDialog();
-            //if (result == true)
-            //{
-            //    MessageBox.Show($"added new entity with id: {_repository.GetAll().Last().Id}");
-            //}
-            //Entities.ItemsSource = _entities.PanDa5ZaTenSuperFilter(_filters);
+            OnDelete();
         }
 
-        void FilterButton_Click(object sender, RoutedEventArgs e)
-        {
-            //WIP
-        }
+        void AddButton_Click(object sender, RoutedEventArgs e) => OnAdd();
+
+        void FilterButton_Click(object sender, RoutedEventArgs e) => OnFilter();
     }
 }
