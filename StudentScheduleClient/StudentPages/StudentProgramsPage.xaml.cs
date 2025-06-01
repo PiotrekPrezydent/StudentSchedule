@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using StudentScheduleBackend.Entities;
 using StudentScheduleBackend.Repositories;
 
 namespace StudentScheduleClient.StudentPages
@@ -23,7 +24,7 @@ namespace StudentScheduleClient.StudentPages
             InitializeComponent();
             int studentId = App.CurrentStudent.Id;
 
-            StudentProgramRepository rep = new(App.DBContext);
+            Repository<StudentProgram> rep = new(App.DBContext);
             ProgramsListView.ItemsSource = rep.GetAll().Where(e => e.StudentId == studentId).Select(e => e.Program).ToList();
         }
 

@@ -39,7 +39,7 @@ namespace StudentScheduleBackend.Repositories
         {
             IQueryable<T> query = _context.Set<T>();
 
-            // Get all ICollection<> properties on T (navigation collections)
+            // Get all ICollection<> properties on T
             var collectionProperties = typeof(T).GetProperties()
                 .Where(p =>
                     p.PropertyType.IsGenericType &&

@@ -1,5 +1,6 @@
 ﻿using StudentScheduleBackend;
 using StudentScheduleBackend.Entities;
+using StudentScheduleBackend.Extensions;
 using StudentScheduleBackend.Repositories;
 
 namespace CLI
@@ -13,8 +14,9 @@ namespace CLI
             Context c = Context.Initialize(s);
 
             Repository<Account> ac = new(c);
+            List<Entity> entities = ac.GetAll().Cast<Entity>().ToList();
 
-            foreach(var a in ac.GetAll())
+            foreach(var a in entities.PanDa5ZaTenSuperFilter(new() { new("Id",1)}))
             {
                 Console.WriteLine(a.ToString());
             }

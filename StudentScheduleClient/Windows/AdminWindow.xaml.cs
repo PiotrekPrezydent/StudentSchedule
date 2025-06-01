@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using StudentScheduleBackend.Entities;
 using StudentScheduleClient.AdminPages;
 
 namespace StudentScheduleClient.Windows
@@ -21,37 +22,37 @@ namespace StudentScheduleClient.Windows
 
         void AccountBTN_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new AdminAccountPage());
+            MainFrame.Navigate(new AdminEntityPage<Account>());
         }
 
         void ClassBTN_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new AdminClassPage());
+            //MainFrame.Navigate(new AdminClassPage());
         }
 
         void ClassroomBTN_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new AdminClassroomPage());
+            //MainFrame.Navigate(new AdminClassroomPage());
         }
 
         void ProgramBTN_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new AdminProgramPage());
+            //MainFrame.Navigate(new AdminProgramPage());
         }
 
         void StudentBTN_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new AdminStudentPage());
+            //MainFrame.Navigate(new AdminStudentPage());
         }
 
         void StudentProgramBTN_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new AdminStudentProgramPage());
+            //MainFrame.Navigate(new AdminStudentProgramPage());
         }
 
         void SubjectBTN_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new AdminSubjectPage());
+            //MainFrame.Navigate(new AdminSubjectPage());
         }
     }
 }
