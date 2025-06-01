@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using StudentScheduleBackend.Attributes;
 
 namespace StudentScheduleBackend.Entities
 {
@@ -10,7 +11,7 @@ namespace StudentScheduleBackend.Entities
         public string LastName { get; set; }
         public string IndexNumber { get; set; }
 
-        [ForeignKey(nameof(Account))]
+        [ForeignKeyOf(typeof(Account))]
         public int AccountId { get; set; }
 
         [JsonIgnore]

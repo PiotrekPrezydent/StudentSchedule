@@ -39,7 +39,8 @@ namespace StudentScheduleClient.AdminPages
                 return;
             try
             {
-                _repository.Delete(_btnContext.Id);
+                _repository.Delete(_btnContext.Id,out string msg);
+                MessageBox.Show(msg);
             }
             catch (Exception ex)
             {

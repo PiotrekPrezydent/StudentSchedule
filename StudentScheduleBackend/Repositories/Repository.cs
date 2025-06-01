@@ -98,9 +98,10 @@ namespace StudentScheduleBackend.Repositories
             _context.Set<T>().Update(entity);
             return _context.SaveChanges() > 0;
         }
-
-        public bool Delete(int id)
+        //TD THIS SHOULD CHECK FOR EVERY ENTITY PROPERTY IF IT HAS FOREIGN KEY OF T, IF SO CHECK IF IT BEIGH USED TO THIS T
+        public bool Delete(int id, out string msg)
         {
+            msg = "";
             IQueryable<T> query = _context.Set<T>();
             if (!query.Any(e => e.Id == id))
                 throw new KeyNotFoundException($"{typeof(T).Name} with id: {id} could not be found");
@@ -120,6 +121,7 @@ namespace StudentScheduleBackend.Repositories
 
                 //throw exception if could not find entity with this foreign key
                 var foreignEntityType = (Type)attr.ConstructorArguments.First().Value!;
+                msg += $"{foreignEntityType.Name} --- {fkId} --- {_context.GetEntitiesByType(foreignEntityType).Any(e => e.Id == fkId)} \n";
                 if (_context.GetEntitiesByType(foreignEntityType).Any(e => e.Id == fkId))
                     throw new ReferentialIntegrityException($"Can't delete {typeof(T).Name} with id {id}, becouse some {foreignEntityType.Name} is referencing to it.");
             }
