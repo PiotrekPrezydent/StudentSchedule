@@ -1,6 +1,9 @@
 ﻿using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Microsoft.IdentityModel.Tokens;
+using StudentScheduleBackend.Attributes;
 using StudentScheduleBackend.Entities;
 
 namespace StudentScheduleClient.Popups
@@ -15,7 +18,7 @@ namespace StudentScheduleClient.Popups
         public ShowColumnsPopup(Type entityType, PopupType type,List<KeyValuePair<string, string>> values)
         {
             InitializeComponent();
-            GenerateColumns(entityType);
+            GenerateColumns(entityType, type);
             ReadedValues = new();
 
             //We cant set here our Id column
@@ -30,40 +33,41 @@ namespace StudentScheduleClient.Popups
                     t.Text = values[0].Value;
             }
 
+            if (type == PopupType.Edit || type == PopupType.Filter)
+            {
+                //set column values
+                for (int i = 0; i < PropertiesContainer.Children.Count; i++)
+                {
+                    //this should never happen i think lol
+                    if (i > values.Count - 1)
+                        return;
 
+                    StackPanel si = (StackPanel)PropertiesContainer.Children[i];
+                    Grid gi = (Grid)si.Children[0];
+                    var control = gi.Children.OfType<FrameworkElement>().FirstOrDefault(c => Grid.GetColumn(c) == 3);
+                    string propName = (string)control.Tag;
+                    var propValue = values.First(e => e.Key == propName).Value;
+                    var controlType = control.GetType();
+                    if(controlType == typeof(ComboBox))
+                    {
+                        var cb = (ComboBox)control;
+                        MessageBox.Show(propName + " --- " + propValue);
+                        cb.SelectedIndex = propValue.IsNullOrEmpty() ? -1 :cb.Items.IndexOf(propValue);
 
-            //if(type == PopupType.Edit || type == PopupType.Filter)
-            //{
-            //    //set column values
-            //    for (int i = 0; i < PropertiesContainer.Children.Count; i++)
-            //    {
-            //        //this should never happen i think lol
-            //        if (i > values.Count - 1)
-            //            return;
-
-            //        StackPanel si = (StackPanel)PropertiesContainer.Children[i];
-            //        Grid gi = (Grid)si.Children[0];
-            //        var control = gi.Children.OfType<FrameworkElement>().FirstOrDefault(c => Grid.GetColumn(c) == 3);
-  
-            //        if (control?.Tag is string propName)
-            //        {
-            //            //get propert of tag 
-            //            var propValue = values.First(e => e.Key == propName).Value;
-            //            var propType = entityType.GetProperty(propName).PropertyType;
-            //            if(propType == typeof(bool))
-            //            {
-            //                (control as CheckBox).IsChecked = (propValue == "True");
-            //            }
-            //            else
-            //            {
-            //                (control as TextBox).Text = propValue;
-            //            }
-            //        }
-            //    }
-            //}
+                    }
+                    else if(controlType == typeof(CheckBox))
+                    {
+                        (control as CheckBox).IsChecked = (propValue == "True");
+                    }
+                    else
+                    {
+                        (control as TextBox).Text = propValue;
+                    }
+                }
+            }
         }
 
-        void GenerateColumns(Type entityType)
+        void GenerateColumns(Type entityType, PopupType pType)
         {
             foreach (var prop in entityType.GetProperties())
             {
@@ -102,31 +106,48 @@ namespace StudentScheduleClient.Popups
                 // CONTROL GENERATION
                 FrameworkElement control;
                 var type = prop.PropertyType;
-                if(prop.CustomAttributes.Any(e=>e.))
-                if (type == typeof(bool))
+                var attr = prop.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(ForeignKeyOf));
+                if (attr != null)
                 {
-                    control = new CheckBox { VerticalAlignment = VerticalAlignment.Center };
-                }
-                else if (type == typeof(TimeSpan))
-                {
-                    control = new TextBox
+                    var foreignEntityType = (Type)attr.ConstructorArguments.First().Value!;
+                    var source = App.DBContext.GetEntitiesByType(foreignEntityType).Select(e => e.Id.ToString()).ToList();
+                    if (pType == PopupType.Filter)
+                        source.Insert(0, "");
+                    control = new ComboBox
                     {
                         VerticalAlignment = VerticalAlignment.Center,
-                        ToolTip = "Format: hh:mm"
+                        ItemsSource = source,
+                        
                     };
-                }
-                else if (type == typeof(int) || type == typeof(double) || type == typeof(decimal))
-                {
-                    control = new TextBox
-                    {
-                        VerticalAlignment = VerticalAlignment.Center,
-                    };
-                    control.PreviewTextInput += (s, e) => e.Handled = !char.IsDigit(e.Text, 0);
                 }
                 else
                 {
-                    control = new TextBox { VerticalAlignment = VerticalAlignment.Center };
+                    if (type == typeof(bool))
+                    {
+                        control = new CheckBox { VerticalAlignment = VerticalAlignment.Center };
+                    }
+                    else if (type == typeof(TimeSpan))
+                    {
+                        control = new TextBox
+                        {
+                            VerticalAlignment = VerticalAlignment.Center,
+                            ToolTip = "Format: hh:mm"
+                        };
+                    }
+                    else if (type == typeof(int) || type == typeof(double) || type == typeof(decimal))
+                    {
+                        control = new TextBox
+                        {
+                            VerticalAlignment = VerticalAlignment.Center,
+                        };
+                        control.PreviewTextInput += (s, e) => e.Handled = !char.IsDigit(e.Text, 0);
+                    }
+                    else
+                    {
+                        control = new TextBox { VerticalAlignment = VerticalAlignment.Center };
+                    }
                 }
+   
 
                 // Tag property name to identify later
                 control.Tag = name;
@@ -150,10 +171,26 @@ namespace StudentScheduleClient.Popups
             {
                 StackPanel si = (StackPanel)PropertiesContainer.Children[i];
                 Grid gi = (Grid)si.Children[0];
-                Label li = (Label)gi.Children[0];
-                TextBox ti = (TextBox)gi.Children[1];
+                var control = gi.Children.OfType<FrameworkElement>().FirstOrDefault(c => Grid.GetColumn(c) == 3);
+                var controlType = control.GetType();
+                KeyValuePair<string, string> kvp;
+                if (controlType == typeof(ComboBox))
+                {
+                    var cb = (ComboBox)control;
+                    if(cb.SelectedIndex != -1)
+                        kvp = new((string)control.Tag, cb.SelectedItem.ToString());
+                    else
+                        kvp = new((string)control.Tag, "");
 
-                KeyValuePair<string, string> kvp = new(li.Content.ToString()!, ti.Text);
+                }
+                else if (controlType == typeof(CheckBox))
+                {
+                    kvp = new((string)control.Tag, (control as CheckBox).IsChecked.ToString());
+                }
+                else
+                {
+                    kvp = new((string)control.Tag, (control as TextBox).Text);
+                }
                 ReadedValues.Add(kvp);
             }
         }

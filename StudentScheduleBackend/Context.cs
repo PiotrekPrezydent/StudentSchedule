@@ -46,7 +46,7 @@ namespace StudentScheduleBackend
         DbSet<Classroom> _classrooms { get; set; }
         DbSet<Subject> _subjects { get; set; }
 
-        internal IReadOnlyList<Entity> GetEntitiesByType(Type t)
+        public IReadOnlyList<Entity> GetEntitiesByType(Type t)
         {
             if (t == typeof(Student))
                 return _students.ToList();

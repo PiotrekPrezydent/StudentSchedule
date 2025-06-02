@@ -3,7 +3,7 @@
 namespace StudentScheduleBackend.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    internal class ForeignKeyOf : Attribute
+    public class ForeignKeyOf : Attribute
     {
         public Type TargetEntityType { get; }
 
