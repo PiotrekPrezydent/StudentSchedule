@@ -138,7 +138,7 @@ namespace StudentScheduleBackend.Repositories
                         int fkId = (int)prop.GetValue(foreignEntity)!;
                         int entityId = foreignEntity.Id;
                         if (fkId == entity.Id)
-                            throw new ReferentialIntegrityException($"You cant delete {typeof(T).Name} with id: {entity.Id}, becouse it is being used in {foreignEntity} with id: {entityId}.");
+                            throw new ReferentialIntegrityException($"You cant delete {typeof(T).Name} with id: {entity.Id}, becouse it is being used in {foreignEntityType.Name} with id: {entityId}.");
                     }
                 }
             }
