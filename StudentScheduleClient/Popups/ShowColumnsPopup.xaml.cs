@@ -32,22 +32,35 @@ namespace StudentScheduleClient.Popups
 
 
 
-            if(type == PopupType.Edit || type == PopupType.Filter)
-            {
-                //set column values
-                for (int i = 0; i < PropertiesContainer.Children.Count; i++)
-                {
-                    //this should never happen i think lol
-                    if (i > values.Count - 1)
-                        return;
+            //if(type == PopupType.Edit || type == PopupType.Filter)
+            //{
+            //    //set column values
+            //    for (int i = 0; i < PropertiesContainer.Children.Count; i++)
+            //    {
+            //        //this should never happen i think lol
+            //        if (i > values.Count - 1)
+            //            return;
 
-                    StackPanel si = (StackPanel)PropertiesContainer.Children[i];
-                    Grid gi = (Grid)si.Children[0];
-                    TextBox ti = (TextBox)gi.Children[1];
-                    var value = values[i].Value;
-                    ti.Text = value;
-                }
-            }
+            //        StackPanel si = (StackPanel)PropertiesContainer.Children[i];
+            //        Grid gi = (Grid)si.Children[0];
+            //        var control = gi.Children.OfType<FrameworkElement>().FirstOrDefault(c => Grid.GetColumn(c) == 3);
+  
+            //        if (control?.Tag is string propName)
+            //        {
+            //            //get propert of tag 
+            //            var propValue = values.First(e => e.Key == propName).Value;
+            //            var propType = entityType.GetProperty(propName).PropertyType;
+            //            if(propType == typeof(bool))
+            //            {
+            //                (control as CheckBox).IsChecked = (propValue == "True");
+            //            }
+            //            else
+            //            {
+            //                (control as TextBox).Text = propValue;
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         void GenerateColumns(Type entityType)
@@ -58,6 +71,7 @@ namespace StudentScheduleClient.Popups
                     continue;
 
                 string name = prop.Name;
+
                 StackPanel container = new StackPanel
                 {
                     Orientation = Orientation.Vertical
@@ -83,14 +97,42 @@ namespace StudentScheduleClient.Popups
 
                 Grid.SetColumn(label, 1);
                 grid.Children.Add(label);
-                var textBox = new TextBox
-                {
-                    Text = "",
-                    VerticalAlignment = VerticalAlignment.Center,
-                };
 
-                Grid.SetColumn(textBox, 3);
-                grid.Children.Add(textBox);
+                //front-end validation:
+                // CONTROL GENERATION
+                FrameworkElement control;
+                var type = prop.PropertyType;
+                if(prop.CustomAttributes.Any(e=>e.))
+                if (type == typeof(bool))
+                {
+                    control = new CheckBox { VerticalAlignment = VerticalAlignment.Center };
+                }
+                else if (type == typeof(TimeSpan))
+                {
+                    control = new TextBox
+                    {
+                        VerticalAlignment = VerticalAlignment.Center,
+                        ToolTip = "Format: hh:mm"
+                    };
+                }
+                else if (type == typeof(int) || type == typeof(double) || type == typeof(decimal))
+                {
+                    control = new TextBox
+                    {
+                        VerticalAlignment = VerticalAlignment.Center,
+                    };
+                    control.PreviewTextInput += (s, e) => e.Handled = !char.IsDigit(e.Text, 0);
+                }
+                else
+                {
+                    control = new TextBox { VerticalAlignment = VerticalAlignment.Center };
+                }
+
+                // Tag property name to identify later
+                control.Tag = name;
+
+                Grid.SetColumn(control, 3);
+                grid.Children.Add(control);
                 container.Children.Add(grid);
                 //id column should be at top
                 if (name == "Id")

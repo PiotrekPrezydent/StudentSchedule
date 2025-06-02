@@ -73,13 +73,16 @@ namespace StudentScheduleClient.AdminPages
         //td create object from kvp
         protected override void OnAdd()
         {
-            var popup = new ShowColumnsPopup(typeof(T),PopupType.Add,new List<KeyValuePair<string, string>> { new("Id", (_repository.GetAll().Last().Id+1).ToString() ) });
+            var popup = new ShowColumnsPopup(typeof(T),PopupType.Add,new List<KeyValuePair<string, string>> { new("Id", "AUTOADDED" ) });
             popup.Owner = Window.GetWindow(this);
 
             bool? result = popup.ShowDialog();
             if (result == false)
                 return;
             var kvps = popup.ReadedValues;
+            //id is setted by default in ms sql
+            kvps.RemoveAt(0);
+
             try
             {
                 var entity = Entity.CreateFromKVP<T>(kvps);
