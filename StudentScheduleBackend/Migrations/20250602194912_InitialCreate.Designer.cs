@@ -12,7 +12,7 @@ using StudentScheduleBackend;
 namespace StudentScheduleBackend.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250602193205_InitialCreate")]
+    [Migration("20250602194912_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
