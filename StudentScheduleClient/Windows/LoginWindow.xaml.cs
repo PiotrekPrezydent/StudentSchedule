@@ -32,19 +32,21 @@ namespace StudentScheduleClient
                     App.DBContext = Context.Initialize(connectionString);
 
                 Repository<Account> ar = new(App.DBContext);
+                Repository<Student> sr = new(App.DBContext);
                 Account acc = ar.GetById(id);
+                Student? s = sr.GetAll().FirstOrDefault(e => e.AccountId == acc.Id);
                 if (acc.IsAdmin)
                 {
                     App.StartAdminSession(this);
                 }
                 else
                 {
-                    if(acc.Student == null)
+                    if(s == null)
                     {
                         ErrorMessage.Text = $"Konto {acc.Id} nie ma powiązanego studenta, i niejest administratorem";
                         return;
                     }
-                    App.StartStudentSession(this, acc.Student);
+                    App.StartStudentSession(this, s);
                 }
             }
             catch (Exception ex)

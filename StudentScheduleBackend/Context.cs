@@ -47,7 +47,7 @@ namespace StudentScheduleBackend
         internal DbSet<Classroom> _classrooms { get; set; }
         internal DbSet<Subject> _subjects { get; set; }
 
-        internal IReadOnlyList<Entity> GetEntitiesByType(Type t)
+        public IReadOnlyList<Entity> GetEntitiesByType(Type t)
         {
             if (t == typeof(Student))
                 return _students.ToList();
@@ -139,6 +139,7 @@ namespace StudentScheduleBackend
                 .HasOne(s => s.Account)
                 .WithOne(a => a.Student)
                 .HasForeignKey<Student>(s => s.AccountId);
+
 
             // Many-to-many: Student <-> Program
             modelBuilder.Entity<StudentProgram>()

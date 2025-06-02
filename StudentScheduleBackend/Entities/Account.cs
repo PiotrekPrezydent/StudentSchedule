@@ -31,8 +31,5 @@ namespace StudentScheduleBackend.Entities
             Password = password;
             IsAdmin = isAdmin;
         }
-
-
     }
-
 }

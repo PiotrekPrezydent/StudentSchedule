@@ -11,17 +11,6 @@ namespace StudentScheduleBackend.Repositories
         readonly Context _context;
 
         public Repository(Context context) =>  _context = context;
-
-        public void Test(out string msg)
-        {
-            var types = _context.Model.GetEntityTypes();
-            msg = "";
-            foreach (var type in types)
-            {
-                msg += type.Name +"---" + type.ClrType.Name +"\n" ;
-            }
-
-        }
         //if we adding we must check for adding real foreign key
         //TD WE MUST CHECK IF WE ADDING STUDENT WITH ALREADY USED account, is so throw exception
         public bool Add(T entity)
@@ -60,6 +49,14 @@ namespace StudentScheduleBackend.Repositories
             // For each collection property, add Include
             foreach (var prop in collectionProperties)
                 query = query.Include(prop.Name);
+
+            foreach (var prop in typeof(T).GetProperties())
+            {
+                if (!typeof(Entity).IsAssignableFrom(prop.PropertyType))
+                    continue;
+                query = query.Include(prop.Name);
+            }
+
 
             return query.ToList();
         }
