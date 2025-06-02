@@ -31,7 +31,7 @@ namespace StudentScheduleClient
                 if (App.DBContext == null)
                     App.DBContext = Context.Initialize(connectionString);
 
-                AccountRepository ar = new(App.DBContext);
+                Repository<Account> ar = new(App.DBContext);
                 Account acc = ar.GetById(id);
                 if (acc.IsAdmin)
                 {
@@ -50,7 +50,7 @@ namespace StudentScheduleClient
             catch (Exception ex)
             {
                 ErrorMessage.Text = $"Zły login lub hasło";
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.Message);
             }
         }
     }

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
+using System.Text.Json.Serialization;
+using StudentScheduleBackend.Entities;
 using StudentScheduleBackend.Repositories;
+using System.Net.Http.Json;
 
 namespace StudentScheduleBackend
 {
@@ -16,32 +15,38 @@ namespace StudentScheduleBackend
             if (!Directory.Exists(fullPath))
                 Directory.CreateDirectory(fullPath);
 
-            AccountRepository accountRepository = new(context);
-            ClassRepository classRepository = new(context);
-            ClassroomRepository classroomRepository = new(context);
-            ProgramRepository programRepository = new(context);
-            StudentProgramRepository studentProgramRepository = new(context);
-            StudentRepository studentRepository = new(context);
-            SubjectRepository subjectRepository = new(context);
+            //this should be autmated but i dont care lol
+            var ar = new Repository<Account>(context);
+            ExportTable(ar.GetAll(), "accounts.json");
 
-            // Export all tables
-            ExportTable(accountRepository.GetAll(), "accounts.json");
-            ExportTable(classRepository.GetAll(), "classes.json");
-            ExportTable(classroomRepository.GetAll(), "classrooms.json");
-            ExportTable(programRepository.GetAll(), "programs.json");
-            ExportTable(studentProgramRepository.GetAll(), "student_programs.json");
-            ExportTable(studentRepository.GetAll(), "students.json");
-            ExportTable(subjectRepository.GetAll(), "subjects.json");
+            var cr = new Repository<Class>(context);
+            ExportTable(cr.GetAll(), "classes.json");
+
+            var clr = new Repository<Classroom>(context);
+            ExportTable(clr.GetAll(), "classrooms.json");
+
+            var st = new Repository<Student>(context);
+            ExportTable(st.GetAll(), "students.json");
+
+            var pr = new Repository<Program>(context);
+            ExportTable(pr.GetAll(), "programs.json");
+
+            var spr = new Repository<StudentProgram>(context);
+            ExportTable(spr.GetAll(), "studentPrograms.json");
+
+            var sr = new Repository<Subject>(context);
+            ExportTable(sr.GetAll(), "subjects.json");
+
 
             // Helper local function to serialize & write
             void ExportTable<T>(IEnumerable<T> data, string fileName)
             {
-                var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+                var json = JsonSerializer.Serialize(data, new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                });
                 File.WriteAllText(Path.Combine(fullPath, fileName), json);
             }
-
         }
-
-
     }
 }

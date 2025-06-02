@@ -39,10 +39,10 @@ namespace StudentScheduleClient.StudentPages
             int studentId = App.CurrentStudent.Id;
             GroupedProgramsWithClasses = new();
 
-            StudentProgramRepository sprep = new(App.DBContext);
+            Repository<StudentProgram> sprep = new(App.DBContext);
             _studentPrograms = sprep.GetAll().Where(e => e.StudentId == studentId).Select(e => e.Program);
 
-            ClassRepository crep = new(App.DBContext);
+            Repository<Class> crep = new(App.DBContext);
             _studentClasses = crep.GetAll().Where(e => _studentPrograms.Any(p => p.Id == e.ProgramId));
 
             SetClassesForCurrentDay();

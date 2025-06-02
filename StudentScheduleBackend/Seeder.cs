@@ -49,7 +49,7 @@ namespace StudentScheduleBackend
 
         static void SeedPrograms(Context context, string path)
         {
-            if (!context.Programs.Any() && File.Exists(path))
+            if (!context._programs.Any() && File.Exists(path))
             {
                 var jsonString = File.ReadAllText(path);
                 var data = JsonSerializer.Deserialize<List<Program>>(jsonString);
@@ -59,7 +59,7 @@ namespace StudentScheduleBackend
 
                 if (data != null)
                 {
-                    context.Programs.AddRange(data);
+                    context._programs.AddRange(data);
                     context.SaveChanges();
                 }
             }
@@ -67,7 +67,7 @@ namespace StudentScheduleBackend
 
         static void SeedStudents(Context context, string path)
         {
-            if (!context.Students.Any() && File.Exists(path))
+            if (!context._students.Any() && File.Exists(path))
             {
                 var jsonString = File.ReadAllText(path);
                 var data = JsonSerializer.Deserialize<List<Student>>(jsonString);
@@ -77,7 +77,7 @@ namespace StudentScheduleBackend
 
                 if (data != null)
                 {
-                    context.Students.AddRange(data);
+                    context._students.AddRange(data);
                     context.SaveChanges();
                 }
             }
@@ -85,17 +85,17 @@ namespace StudentScheduleBackend
 
         static void SeedAccounts(Context context, string path)
         {
-            if (!context.Accounts.Any() && File.Exists(path))
+            if (!context._accounts.Any() && File.Exists(path))
             {
                 var jsonString = File.ReadAllText(path);
                 var data = JsonSerializer.Deserialize<List<Account>>(jsonString);
 
-                foreach (var entity in data)
-                    entity.Id = 0;
+                //foreach (var entity in data)
+                //    entity.Id = 0;
 
                 if (data != null)
                 {
-                    context.Accounts.AddRange(data);
+                    context._accounts.AddRange(data);
                     context.SaveChanges();
                 }
             }
@@ -103,14 +103,14 @@ namespace StudentScheduleBackend
 
         static void SeedStudentPrograms(Context context, string path)
         {
-            if (!context.StudentPrograms.Any() && File.Exists(path))
+            if (!context._studentPrograms.Any() && File.Exists(path))
             {
                 var jsonString = File.ReadAllText(path);
                 var data = JsonSerializer.Deserialize<List<StudentProgram>>(jsonString);
 
                 if (data != null)
                 {
-                    context.StudentPrograms.AddRange(data);
+                    context._studentPrograms.AddRange(data);
                     context.SaveChanges();
                 }
             }
@@ -118,7 +118,7 @@ namespace StudentScheduleBackend
 
         static void SeedSubjects(Context context, string path)
         {
-            if (!context.Subjects.Any() && File.Exists(path))
+            if (!context._subjects.Any() && File.Exists(path))
             {
                 var jsonString = File.ReadAllText(path);
                 var data = JsonSerializer.Deserialize<List<Subject>>(jsonString);
@@ -128,7 +128,7 @@ namespace StudentScheduleBackend
 
                 if (data != null)
                 {
-                    context.Subjects.AddRange(data);
+                    context._subjects.AddRange(data);
                     context.SaveChanges();
                 }
             }
@@ -136,7 +136,7 @@ namespace StudentScheduleBackend
 
         static void SeedClassrooms(Context context, string path)
         {
-            if (!context.Classrooms.Any() && File.Exists(path))
+            if (!context._classrooms.Any() && File.Exists(path))
             {
                 var jsonString = File.ReadAllText(path);
                 var data = JsonSerializer.Deserialize<List<Classroom>>(jsonString);
@@ -146,7 +146,7 @@ namespace StudentScheduleBackend
 
                 if (data != null)
                 {
-                    context.Classrooms.AddRange(data);
+                    context._classrooms.AddRange(data);
                     context.SaveChanges();
                 }
             }
@@ -154,17 +154,17 @@ namespace StudentScheduleBackend
 
         static void SeedClasses(Context context, string path)
         {
-            if (!context.Classes.Any() && File.Exists(path))
+            if (!context._classes.Any() && File.Exists(path))
             {
                 var jsonString = File.ReadAllText(path);
                 var data = JsonSerializer.Deserialize<List<Class>>(jsonString);
 
-                                foreach (var entity in data)
+                foreach (var entity in data)
                     entity.Id = 0;
 
                 if (data != null)
                 {
-                    context.Classes.AddRange(data);
+                    context._classes.AddRange(data);
                     context.SaveChanges();
                 }
             }

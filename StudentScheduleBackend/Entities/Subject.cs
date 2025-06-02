@@ -1,14 +1,15 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace StudentScheduleBackend.Entities
 {
-    public class Subject
+    [Table("Subjects")]
+    public class Subject : Entity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
 
         [JsonIgnore]
-        public ICollection<Class> Classes { get; set; }
+        public ICollection<Class>? Classes { get; set; }
 
         public Subject() { }
 
@@ -22,7 +23,5 @@ namespace StudentScheduleBackend.Entities
         {
             Name = name;
         }
-
-        public override string ToString() => $"{Id}\t{Name}";
     }
 }

@@ -1,21 +1,24 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+using StudentScheduleBackend.Attributes;
 
 namespace StudentScheduleBackend.Entities
 {
-    public class Student
+    [Table("Students")]
+    public class Student : Entity
     {
-        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string IndexNumber { get; set; }
 
+        [ForeignKeyOf(typeof(Account))]
         public int AccountId { get; set; }
 
         [JsonIgnore]
-        public Account Account { get; set; }
+        public Account? Account { get; set; }
 
         [JsonIgnore]
-        public ICollection<StudentProgram> StudentPrograms { get; set; }
+        public ICollection<StudentProgram>? StudentPrograms { get; set; }
 
         public Student() { }
 
@@ -35,7 +38,5 @@ namespace StudentScheduleBackend.Entities
             IndexNumber = indexNumber;
             AccountId = accountId;
         }
-
-        public override string ToString() => $"{Id}\t{FirstName}\t{LastName}\t{IndexNumber}\t{AccountId}";
     }
 }

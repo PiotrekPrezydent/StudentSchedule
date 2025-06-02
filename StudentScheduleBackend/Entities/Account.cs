@@ -1,19 +1,20 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace StudentScheduleBackend.Entities
 {
-    public class Account
+    [Table("Accounts")]
+    public class Account : Entity
     {
-        public int Id { get; set; }
         public string Login { get; set; }
+
         public string Password { get; set; }
 
         public bool IsAdmin { get; set; }
 
         [JsonIgnore]
-        public Student Student { get; set; }
+        public Student? Student { get; set; }
 
-        //ef constructor
         public Account() { }
 
         public Account(int id, string login, string password, bool isAdmin)
@@ -31,7 +32,7 @@ namespace StudentScheduleBackend.Entities
             IsAdmin = isAdmin;
         }
 
-        public override string ToString() => $"{Id}\t{Login}\t{Password}\t{IsAdmin}";
+
     }
 
 }
