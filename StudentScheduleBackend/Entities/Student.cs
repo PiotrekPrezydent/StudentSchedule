@@ -20,6 +20,8 @@ namespace StudentScheduleBackend.Entities
         [JsonIgnore]
         public ICollection<StudentProgram>? StudentPrograms { get; set; }
 
+        public Student() { }
+
         public Student(int id, string firstName, string lastName, string indexNumber, int accountId)
         {
             Id = id;

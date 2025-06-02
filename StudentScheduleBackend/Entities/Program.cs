@@ -14,6 +14,8 @@ namespace StudentScheduleBackend.Entities
         [JsonIgnore]
         public ICollection<Class>? Classes { get; set; }
 
+        public Program() { }
+
         public Program(int id, string name)
         {
             Id = id;

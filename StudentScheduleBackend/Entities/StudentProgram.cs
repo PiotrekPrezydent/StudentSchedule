@@ -19,6 +19,8 @@ namespace StudentScheduleBackend.Entities
         [JsonIgnore]
         public Program? Program { get; set; }
 
+        public StudentProgram() { }
+
         public StudentProgram(int studentId, int programId)
         {
             StudentId = studentId;

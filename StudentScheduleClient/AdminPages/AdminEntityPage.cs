@@ -1,12 +1,13 @@
 ﻿using System.Windows;
 using StudentScheduleBackend.Entities;
+using StudentScheduleBackend.Exceptions;
 using StudentScheduleBackend.Extensions;
 using StudentScheduleBackend.Repositories;
 using StudentScheduleClient.Popups;
 
 namespace StudentScheduleClient.AdminPages
 {
-    class AdminEntityPage<T> : BaseAdminPage where T : Entity 
+    class AdminEntityPage<T> : BaseAdminPage where T : Entity, new()
     {
         Repository<T> _repository;
         List<KeyValuePair<string, string>> _filters;
@@ -25,10 +26,29 @@ namespace StudentScheduleClient.AdminPages
                 return;
 
             var popup = new ShowColumnsPopup(typeof(T), PopupType.Edit, _btnContext.GetColumnsWithValues());
+            string msg = "";
+            foreach(var kvp in _btnContext.GetColumnsWithValues())
+            {
+                msg += kvp.Key + " --- " + kvp.Value + "\n";
+            }
+            MessageBox.Show(msg);
             popup.Owner = Window.GetWindow(this);
 
             bool? result = popup.ShowDialog();
+            if (result == false)
+                return;
             var kvps = popup.ReadedValues;
+            //check if readed values are correct
+            try
+            {
+                var entity = Entity.CreateFromKVP<T>(kvps);
+                _repository.Update(entity);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return;
+            }
 
             Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
         }
@@ -39,12 +59,12 @@ namespace StudentScheduleClient.AdminPages
                 return;
             try
             {
-                _repository.Delete(_btnContext.Id,out string msg);
-                MessageBox.Show(msg);
+                _repository.Delete(_btnContext.Id);
             }
-            catch (Exception ex)
+            catch(ReferentialIntegrityException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.ToString());
+                return;
             }
 
             Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
@@ -57,7 +77,19 @@ namespace StudentScheduleClient.AdminPages
             popup.Owner = Window.GetWindow(this);
 
             bool? result = popup.ShowDialog();
+            if (result == false)
+                return;
             var kvps = popup.ReadedValues;
+            try
+            {
+                var entity = Entity.CreateFromKVP<T>(kvps);
+                _repository.Add(entity);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return;
+            }
 
             Entities.ItemsSource = _repository.GetAll().PanDa5ZaTenSuperFilter(_filters);
         }
@@ -69,6 +101,8 @@ namespace StudentScheduleClient.AdminPages
             popup.Owner = Window.GetWindow(this);
 
             bool? result = popup.ShowDialog();
+            if (result == false)
+                return;
             var kvps = popup.ReadedValues;
 
             _filters = kvps;

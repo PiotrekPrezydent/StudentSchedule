@@ -28,15 +28,16 @@ namespace StudentScheduleClient.Popups
                 t.IsReadOnly = true;
                 if(type == PopupType.Add)
                     t.Text = values[0].Value;
-                return;
-
             }
+
+
 
             if(type == PopupType.Edit || type == PopupType.Filter)
             {
                 //set column values
                 for (int i = 0; i < PropertiesContainer.Children.Count; i++)
                 {
+                    //this should never happen i think lol
                     if (i > values.Count - 1)
                         return;
 

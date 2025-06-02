@@ -1,7 +1,10 @@
-﻿namespace StudentScheduleBackend.Entities
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+
+namespace StudentScheduleBackend.Entities
 {
     public abstract class Entity
     {
+        public Entity() { }
         //all entities has to have id for them
         public int Id { get; protected set; }
 
@@ -38,6 +41,22 @@
             }
             return ret;
         }
+        //universal constructor from list of kvp (first string is name of property, second is value)
+        public static T CreateFromKVP<T>(List<KeyValuePair<string,string>> kvps) where T : Entity, new()
+        {
+            var obj = new T();
 
+            var type = typeof(T);
+            foreach (var kvp in kvps)
+            {
+                var prop = type.GetProperty(kvp.Key);
+                if (prop != null && prop.CanWrite)
+                {
+                    var convertedValue = Convert.ChangeType(kvp.Value, prop.PropertyType);
+                    prop.SetValue(obj, convertedValue);
+                }
+            }
+            return obj;
+        }
     }
 }

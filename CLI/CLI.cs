@@ -14,12 +14,6 @@ namespace CLI
             Context c = Context.Initialize(s);
 
             Repository<Account> ac = new(c);
-            List<Entity> entities = ac.GetAll().Cast<Entity>().ToList();
-
-            foreach(var a in entities.PanDa5ZaTenSuperFilter(new() { new("Id",1)}))
-            {
-                Console.WriteLine(a.GetColumnsWithValues().ElementAt(0).Key + " --- " + a.GetColumnsWithValues().ElementAt(0).Value);
-            }
         }
     }
 }

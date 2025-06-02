@@ -15,6 +15,8 @@ namespace StudentScheduleBackend.Entities
         [JsonIgnore]
         public Student? Student { get; set; }
 
+        public Account() { }
+
         public Account(int id, string login, string password, bool isAdmin)
         {
             Id = id;
@@ -29,6 +31,8 @@ namespace StudentScheduleBackend.Entities
             Password = password;
             IsAdmin = isAdmin;
         }
+
+
     }
 
 }

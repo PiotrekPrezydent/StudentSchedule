@@ -12,6 +12,18 @@ namespace StudentScheduleBackend.Repositories
 
         public Repository(Context context) =>  _context = context;
 
+        public void Test(out string msg)
+        {
+            var types = _context.Model.GetEntityTypes();
+            msg = "";
+            foreach (var type in types)
+            {
+                msg += type.Name +"---" + type.ClrType.Name +"\n" ;
+            }
+
+        }
+        //if we adding we must check for adding real foreign key
+        //TD WE MUST CHECK IF WE ADDING STUDENT WITH ALREADY USED account, is so throw exception
         public bool Add(T entity)
         {
             //if we using foreign keys, check if added entity contains proper foreign key
@@ -71,6 +83,7 @@ namespace StudentScheduleBackend.Repositories
             return query.First(e => e.Id == id);
         }
 
+
         public bool Update(T entity)
         {
             IQueryable<T> query = _context.Set<T>();
@@ -98,34 +111,40 @@ namespace StudentScheduleBackend.Repositories
             _context.Set<T>().Update(entity);
             return _context.SaveChanges() > 0;
         }
-        //TD THIS SHOULD CHECK FOR EVERY ENTITY PROPERTY IF IT HAS FOREIGN KEY OF T, IF SO CHECK IF IT BEIGH USED TO THIS T
-        public bool Delete(int id, out string msg)
+
+        public bool Delete(int id)
         {
-            msg = "";
             IQueryable<T> query = _context.Set<T>();
             if (!query.Any(e => e.Id == id))
                 throw new KeyNotFoundException($"{typeof(T).Name} with id: {id} could not be found");
 
             T entity = query.First(e => e.Id == id);
-
-            //if we using foreign keys, check if added entity contains proper foreign key
-            foreach (var p in typeof(T).GetProperties())
+            var entityTypes = _context.Model.GetEntityTypes().Select(e => e.ClrType);
+            foreach(var entityType in entityTypes)
             {
-                //chceck if entity has any foreign key attributes
-                var attr = p.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(ForeignKeyOf));
-                if (attr == null)
+                //no need to check
+                if (entityType == typeof(T))
                     continue;
 
-                //get int value of this foreign key
-                int fkId = (int)p.GetValue(entity)!;
+                foreach(var prop in entityType.GetProperties())
+                {
+                    var attr = prop.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(ForeignKeyOf));
+                    if (attr == null)
+                        continue;
 
-                //throw exception if could not find entity with this foreign key
-                var foreignEntityType = (Type)attr.ConstructorArguments.First().Value!;
-                msg += $"{foreignEntityType.Name} --- {fkId} --- {_context.GetEntitiesByType(foreignEntityType).Any(e => e.Id == fkId)} \n";
-                if (_context.GetEntitiesByType(foreignEntityType).Any(e => e.Id == fkId))
-                    throw new ReferentialIntegrityException($"Can't delete {typeof(T).Name} with id {id}, becouse some {foreignEntityType.Name} is referencing to it.");
+                    var foreignEntityType = (Type)attr.ConstructorArguments.First().Value!;
+                    if (foreignEntityType != typeof(T))
+                        continue;
+
+                    foreach(var foreignEntity in _context.GetEntitiesByType(entityType))
+                    {
+                        int fkId = (int)prop.GetValue(foreignEntity)!;
+                        int entityId = foreignEntity.Id;
+                        if (fkId == entity.Id)
+                            throw new ReferentialIntegrityException($"You cant delete {typeof(T).Name} with id: {entity.Id}, becouse it is being used in {foreignEntity} with id: {entityId}.");
+                    }
+                }
             }
-
             _context.ChangeTracker.Clear();
             _context.Set<T>().Remove(entity);
             return _context.SaveChanges() > 0;

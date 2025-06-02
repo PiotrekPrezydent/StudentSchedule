@@ -31,6 +31,8 @@ namespace StudentScheduleBackend.Entities
         [JsonIgnore]
         public Classroom? Classroom { get; set; }
 
+        public Class() { }
+
         public Class(int id, int programId, int subjectId, int year, string weekday, int classroomId, TimeSpan startTime, TimeSpan endTime)
         {
             Id = id;
