@@ -38,15 +38,16 @@ namespace StudentScheduleBackend
         //lock singleton from multi-thearding creations of same object
         static readonly object _lock = new();
 
-        DbSet<Student> _students { get; set; }
-        DbSet<Account> _accounts { get; set; }
-        DbSet<Program> _programs { get; set; }
-        DbSet<StudentProgram> _studentPrograms { get; set; }
-        DbSet<Class> _classes { get; set; }
-        DbSet<Classroom> _classrooms { get; set; }
-        DbSet<Subject> _subjects { get; set; }
+        //internal is used only for seeder and i should fix that, but i dont care lol
+        internal DbSet<Student> _students { get; set; }
+        internal DbSet<Account> _accounts { get; set; }
+        internal DbSet<Program> _programs { get; set; }
+        internal DbSet<StudentProgram> _studentPrograms { get; set; }
+        internal DbSet<Class> _classes { get; set; }
+        internal DbSet<Classroom> _classrooms { get; set; }
+        internal DbSet<Subject> _subjects { get; set; }
 
-        public IReadOnlyList<Entity> GetEntitiesByType(Type t)
+        internal IReadOnlyList<Entity> GetEntitiesByType(Type t)
         {
             if (t == typeof(Student))
                 return _students.ToList();

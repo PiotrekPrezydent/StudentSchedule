@@ -50,7 +50,7 @@ namespace StudentScheduleClient
             catch (Exception ex)
             {
                 ErrorMessage.Text = $"Zły login lub hasło";
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.Message);
             }
         }
     }

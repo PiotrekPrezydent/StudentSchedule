@@ -12,8 +12,8 @@ namespace CLI
             string s = Context.BuildConnectionString("./AppSettings.json", "ADMIN", "ADMIN", out int accountId);
 
             Context c = Context.Initialize(s);
-
-            Repository<Account> ac = new(c);
+            Exporter.CreateBackups(c, "./Backups");
+            Console.WriteLine("ended backups");
         }
     }
 }

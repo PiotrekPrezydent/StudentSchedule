@@ -6,7 +6,7 @@ namespace StudentScheduleBackend.Entities
     {
         public Entity() { }
         //all entities has to have id for them
-        public int Id { get; protected set; }
+        public int Id { get; set; }
 
         //base ToString for all entities it will return entity type name + (name = value) for all properties
         public override string ToString()
