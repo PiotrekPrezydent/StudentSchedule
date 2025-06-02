@@ -12,7 +12,7 @@ using StudentScheduleBackend;
 namespace StudentScheduleBackend.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250528204247_InitialCreate")]
+    [Migration("20250602193205_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -38,11 +38,13 @@ namespace StudentScheduleBackend.Migrations
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -60,16 +62,16 @@ namespace StudentScheduleBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ClassroomId")
+                    b.Property<int>("ClassroomId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan?>("EndTime")
+                    b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
 
                     b.Property<int>("ProgramId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan?>("StartTime")
+                    b.Property<TimeSpan>("StartTime")
                         .HasColumnType("time");
 
                     b.Property<int>("SubjectId")
@@ -77,7 +79,8 @@ namespace StudentScheduleBackend.Migrations
 
                     b.Property<string>("Weekday")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
@@ -103,11 +106,13 @@ namespace StudentScheduleBackend.Migrations
 
                     b.Property<string>("Building")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("RoomNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
 
@@ -124,7 +129,8 @@ namespace StudentScheduleBackend.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -144,15 +150,18 @@ namespace StudentScheduleBackend.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("IndexNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -173,6 +182,9 @@ namespace StudentScheduleBackend.Migrations
                     b.Property<int>("ProgramId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.HasKey("StudentId", "ProgramId");
 
                     b.HasIndex("ProgramId");
@@ -190,7 +202,8 @@ namespace StudentScheduleBackend.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -202,7 +215,8 @@ namespace StudentScheduleBackend.Migrations
                     b.HasOne("StudentScheduleBackend.Entities.Classroom", "Classroom")
                         .WithMany("Classes")
                         .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StudentScheduleBackend.Entities.Program", "Program")
                         .WithMany("Classes")
@@ -255,8 +269,7 @@ namespace StudentScheduleBackend.Migrations
 
             modelBuilder.Entity("StudentScheduleBackend.Entities.Account", b =>
                 {
-                    b.Navigation("Student")
-                        .IsRequired();
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("StudentScheduleBackend.Entities.Classroom", b =>

@@ -12,7 +12,7 @@ namespace StudentScheduleBackend
             SeedAccounts(context, Path.Combine(folderPath, "accounts.json"));
             SeedStudents(context, Path.Combine(folderPath, "students.json"));
             SeedPrograms(context, Path.Combine(folderPath, "programs.json"));
-            SeedStudentPrograms(context, Path.Combine(folderPath, "student_programs.json"));
+            SeedStudentPrograms(context, Path.Combine(folderPath, "studentPrograms.json"));
             SeedSubjects(context, Path.Combine(folderPath, "subjects.json"));
             SeedClassrooms(context, Path.Combine(folderPath, "classrooms.json"));
             SeedClasses(context, Path.Combine(folderPath, "classes.json"));
@@ -90,8 +90,8 @@ namespace StudentScheduleBackend
                 var jsonString = File.ReadAllText(path);
                 var data = JsonSerializer.Deserialize<List<Account>>(jsonString);
 
-                //foreach (var entity in data)
-                //    entity.Id = 0;
+                foreach (var entity in data)
+                    entity.Id = 0;
 
                 if (data != null)
                 {

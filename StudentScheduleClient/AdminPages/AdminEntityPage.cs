@@ -35,6 +35,7 @@ namespace StudentScheduleClient.AdminPages
             //check if readed values are correct
             try
             {
+                MessageBox.Show(kvps.ElementsToString());
                 var entity = Entity.CreateFromKVP<T>(kvps);
                 _repository.Update(entity);
             }

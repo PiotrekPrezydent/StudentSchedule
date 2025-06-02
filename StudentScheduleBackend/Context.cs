@@ -125,54 +125,112 @@ namespace StudentScheduleBackend
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Unique constraints
-            modelBuilder.Entity<Student>()
-                .HasIndex(s => s.IndexNumber)
-                .IsUnique();
+            base.OnModelCreating(modelBuilder);
 
+            // Account: Login unique
             modelBuilder.Entity<Account>()
                 .HasIndex(a => a.Login)
+                .IsUnique();
+
+            // Student: IndexNumber unique
+            modelBuilder.Entity<Student>()
+                .HasIndex(s => s.IndexNumber)
                 .IsUnique();
 
             // One-to-one: Student <-> Account
             modelBuilder.Entity<Student>()
                 .HasOne(s => s.Account)
                 .WithOne(a => a.Student)
-                .HasForeignKey<Student>(s => s.AccountId);
+                .HasForeignKey<Student>(s => s.AccountId)
+                .OnDelete(DeleteBehavior.Cascade); // Usunięcie konta -> usuwa studenta
 
-
-            // Many-to-many: Student <-> Program
+            // Many-to-many: Student <-> Program przez StudentProgram
             modelBuilder.Entity<StudentProgram>()
                 .HasKey(sp => new { sp.StudentId, sp.ProgramId });
 
             modelBuilder.Entity<StudentProgram>()
                 .HasOne(sp => sp.Student)
                 .WithMany(s => s.StudentPrograms)
-                .HasForeignKey(sp => sp.StudentId);
+                .HasForeignKey(sp => sp.StudentId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<StudentProgram>()
                 .HasOne(sp => sp.Program)
                 .WithMany(p => p.StudentPrograms)
-                .HasForeignKey(sp => sp.ProgramId);
+                .HasForeignKey(sp => sp.ProgramId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // One-to-many: Program -> Classes
+            // One-to-many: Program -> Class
             modelBuilder.Entity<Class>()
                 .HasOne(c => c.Program)
                 .WithMany(p => p.Classes)
-                .HasForeignKey(c => c.ProgramId);
+                .HasForeignKey(c => c.ProgramId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // One-to-many: Subject -> Classes
+            // One-to-many: Subject -> Class
             modelBuilder.Entity<Class>()
                 .HasOne(c => c.Subject)
                 .WithMany(s => s.Classes)
-                .HasForeignKey(c => c.SubjectId);
+                .HasForeignKey(c => c.SubjectId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // One-to-many: Classroom -> Classes
+            // One-to-many: Classroom -> Class
             modelBuilder.Entity<Class>()
                 .HasOne(c => c.Classroom)
-                .WithMany(cr => cr.Classes)
-                .HasForeignKey(c => c.ClassroomId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .WithMany(cl => cl.Classes)
+                .HasForeignKey(c => c.ClassroomId);
+
+            // Configure lengths and required fields (optional but recommended)
+            modelBuilder.Entity<Account>()
+                .Property(a => a.Login)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<Account>()
+                .Property(a => a.Password)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<Student>()
+                .Property(s => s.FirstName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Student>()
+                .Property(s => s.LastName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Student>()
+                .Property(s => s.IndexNumber)
+                .IsRequired()
+                .HasMaxLength(20);
+
+            modelBuilder.Entity<Program>()
+                .Property(p => p.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<Subject>()
+                .Property(s => s.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<Classroom>()
+                .Property(c => c.Building)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Classroom>()
+                .Property(c => c.RoomNumber)
+                .IsRequired()
+                .HasMaxLength(10);
+
+            modelBuilder.Entity<Class>()
+                .Property(c => c.Weekday)
+                .IsRequired()
+                .HasMaxLength(20);
         }
+
     }
 }

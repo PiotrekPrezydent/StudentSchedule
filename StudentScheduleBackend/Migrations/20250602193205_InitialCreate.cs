@@ -17,8 +17,8 @@ namespace StudentScheduleBackend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Login = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Login = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     IsAdmin = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -32,8 +32,8 @@ namespace StudentScheduleBackend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Building = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoomNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Building = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    RoomNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,7 +46,7 @@ namespace StudentScheduleBackend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,7 +59,7 @@ namespace StudentScheduleBackend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -72,9 +72,9 @@ namespace StudentScheduleBackend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IndexNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    IndexNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -97,10 +97,10 @@ namespace StudentScheduleBackend.Migrations
                     ProgramId = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
-                    Weekday = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClassroomId = table.Column<int>(type: "int", nullable: true),
-                    StartTime = table.Column<TimeSpan>(type: "time", nullable: true),
-                    EndTime = table.Column<TimeSpan>(type: "time", nullable: true)
+                    Weekday = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    ClassroomId = table.Column<int>(type: "int", nullable: false),
+                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -110,7 +110,7 @@ namespace StudentScheduleBackend.Migrations
                         column: x => x.ClassroomId,
                         principalTable: "Classrooms",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Classes_Programs_ProgramId",
                         column: x => x.ProgramId,
@@ -130,7 +130,8 @@ namespace StudentScheduleBackend.Migrations
                 columns: table => new
                 {
                     StudentId = table.Column<int>(type: "int", nullable: false),
-                    ProgramId = table.Column<int>(type: "int", nullable: false)
+                    ProgramId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

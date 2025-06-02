@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
 namespace StudentScheduleBackend.Extensions
@@ -27,6 +28,32 @@ namespace StudentScheduleBackend.Extensions
                 }
                 return true;
             });
+        }
+
+        //why the fuck this is not in base c#...
+        public static string ElementsToString<T>(this ICollection<T> collection)
+        {
+            var msg = new StringBuilder();
+
+            foreach (var item in collection)
+            {
+                if (item is System.Collections.DictionaryEntry entry)
+                {
+                    msg.AppendLine($"{entry.Key} - {entry.Value}");
+                }
+                else if (item != null && item.GetType().IsGenericType &&
+                         item.GetType().GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
+                {
+                    dynamic dynItem = item;
+                    msg.AppendLine($"{dynItem.Key} - {dynItem.Value}");
+                }
+                else
+                {
+                    msg.AppendLine(item?.ToString());
+                }
+            }
+
+            return msg.ToString();
         }
     }
 }

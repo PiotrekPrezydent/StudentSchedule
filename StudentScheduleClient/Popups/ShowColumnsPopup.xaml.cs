@@ -71,6 +71,8 @@ namespace StudentScheduleClient.Popups
             {
                 if (typeof(Entity).IsAssignableFrom(prop.PropertyType))
                     continue;
+                if (prop.PropertyType.IsGenericType && typeof(ICollection<>).IsAssignableFrom(prop.PropertyType.GetGenericTypeDefinition()))
+                    continue;
 
                 string name = prop.Name;
 
