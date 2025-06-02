@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.IdentityModel.Tokens;
@@ -51,7 +50,6 @@ namespace StudentScheduleClient.Popups
                     if(controlType == typeof(ComboBox))
                     {
                         var cb = (ComboBox)control;
-                        MessageBox.Show(propName + " --- " + propValue);
                         cb.SelectedIndex = propValue.IsNullOrEmpty() ? -1 :cb.Items.IndexOf(propValue);
 
                     }

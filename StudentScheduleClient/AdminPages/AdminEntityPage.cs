@@ -26,12 +26,6 @@ namespace StudentScheduleClient.AdminPages
                 return;
 
             var popup = new ShowColumnsPopup(typeof(T), PopupType.Edit, _btnContext.GetColumnsWithValues());
-            string msg = "";
-            foreach(var kvp in _btnContext.GetColumnsWithValues())
-            {
-                msg += kvp.Key + " --- " + kvp.Value + "\n";
-            }
-            MessageBox.Show(msg);
             popup.Owner = Window.GetWindow(this);
 
             bool? result = popup.ShowDialog();
