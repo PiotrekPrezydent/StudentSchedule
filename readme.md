@@ -1,80 +1,141 @@
-﻿# StudentSchedule Solution
+# PiotrekPrezydent/StudentSchedule
+Overview
+--------
 
-A multi-project C# solution for managing student schedules. This solution includes:
+Relevant source files
 
-- **CLI**: A command-line interface for debugging.
-- **StudentScheduleBackend**: An ASP.NET Core Web API that handles data and business logic.
-- **StudentScheduleClient**: A WPF desktop client with Admin and Student views.
+*   [StudentScheduleBackend/Context.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs)
+*   [StudentScheduleBackend/Seeder.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Seeder.cs)
+*   [StudentScheduleClient/AdminPages/AdminEntityPage.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/AdminPages/AdminEntityPage.cs)
+*   [StudentScheduleClient/App.xaml.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/App.xaml.cs)
+*   [StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs)
 
----
+Purpose and Scope
+-----------------
 
-## 📁 Solution Structure
-```StudentSchedule.sln
-├── CLI/ # Command-line interface for development/debugging
-├── StudentScheduleBackend/ # EF API to comunicate with DB
-│ ├── Entities/ # Domain models
-│ ├── Exceptions/ # Custom exceptions
-│ ├── Extensions/ # Extension methods
-│ ├── Interfaces/ # Abstractions and contracts
-│ ├── Migrations/ # EF Core migrations
-│ ├── Repositories/ # Data access logic
-│ ├── AppDbContextFactory.cs # Factory for DbContext creation
-│ ├── Context.cs # Main EF Core DbContext
-│ ├── Exporter.cs # Data export logic
-│ └── Seeder.cs # Initial seeding logic
-│
-├── StudentScheduleClient/ # WPF frontend application
-│ ├── AdminPages/ # Views/pages for Admin users
-│ ├── StudentPages/ # Views/pages for Student users
-│ ├── Windows/ # Main and additional windows
-│ ├── App.xaml # Application definition
-│ ├── AppSettings.json # Configuration file
+This document provides a comprehensive overview of the StudentSchedule repository, a desktop-based student scheduling management system. The system enables educational institutions to manage student enrollments, academic programs, class schedules, and facility assignments through a WPF desktop application with role-based access control.
+
+The system implements a three-tier architecture consisting of a WPF client application, Entity Framework Core-based backend services, and SQL Server database. For detailed information about specific components: authentication mechanisms are covered in [Authentication & Authorization](https://deepwiki.com/PiotrekPrezydent/StudentSchedule/3-authentication-and-authorization), the data model structure is detailed in [Data Model](https://deepwiki.com/PiotrekPrezydent/StudentSchedule/4-data-model), and administrative interface functionality is explained in [Admin Interface](https://deepwiki.com/PiotrekPrezydent/StudentSchedule/5-admin-interface).
+
+System Architecture
+-------------------
+
+The StudentSchedule system follows a modular architecture with clear separation of concerns across presentation, business logic, and data access layers.
+
+### High-Level Component Architecture
+
 ```
 
-# 🧰 Project Descriptions
+```
 
-### CLI (CommandLine Project)
 
-A console application for development and debugging purposes.
+Sources: [StudentScheduleClient/App.xaml.cs1-59](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/App.xaml.cs#L1-L59) [StudentScheduleBackend/Context.cs1-236](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs#L1-L236) [StudentScheduleBackend/Seeder.cs1-173](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Seeder.cs#L1-L173)
 
-- Used to test backend functionality and simulate inputs
-- Loads configurations from `AppSettings.json`
+### Authentication and Session Management Flow
 
----
+```
 
-### StudentScheduleBackend (ASP.NET Core API)
+```
 
-Handles business logic, database interaction, and exposes a RESTful API.
 
-**Key Features:**
+Sources: [StudentScheduleBackend/Context.cs94-122](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs#L94-L122) [StudentScheduleClient/App.xaml.cs44-57](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/App.xaml.cs#L44-L57)
 
-- JSON-based communication  
-- Entity Framework Core for data persistence  
-- Clean architecture with separation of concerns
+Core System Components
+----------------------
 
-**Main Components:**
+### Database Context and Connection Management
 
-- `Entities/` – Model definitions  
-- `Repositories/` – Data access layer  
-- `Interfaces/` – Abstractions for dependency injection  
-- `Extensions/` – Helper/utility extensions  
-- `Exceptions/` – Custom error handling  
-- `Migrations/` – Database migration history  
-- `Seeder.cs` – Initializes default data  
-- `Exporter.cs` – Handles data exports  
-- `Context.cs` – EF DbContext implementation
+The `Context` class implements a thread-safe singleton pattern for database access with dynamic connection string generation based on user authentication:
 
----
 
-### StudentScheduleClient (WPF Application)
 
-A desktop GUI for students and administrators.
+* Component: Context.Instance
+  * Responsibility: Singleton access point
+  * Key Methods: Initialize(), BuildConnectionString()
+* Component: Connection String Builder
+  * Responsibility: Role-based database access
+  * Key Methods: Uses ReadWriteLogin for admins, ReadLogin for students
+* Component: Entity Access
+  * Responsibility: Type-safe entity retrieval
+  * Key Methods: GetEntitiesByType() for reflection-based operations
 
-**Features:**
 
-- Role-based navigation (Admin vs. Student)
-- Separate views for each role (`AdminPages/`, `StudentPages/`)
-- API communication with backend via `HttpClient`
-- Styled using WPF’s MVVM pattern (recommended)
+The system uses separate database credentials for different user roles:
 
----
+*   `ReadWriteLogin`/`ReadWritePass` for administrative operations
+*   `ReadLogin`/`ReadPass` for student read-only access
+
+Sources: [StudentScheduleBackend/Context.cs25-92](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs#L25-L92) [StudentScheduleBackend/Context.cs94-122](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs#L94-L122)
+
+### Generic CRUD Operations
+
+The `AdminEntityPage<T>` class implements a generic pattern for administrative data management:
+
+```
+
+```
+
+
+Sources: [StudentScheduleClient/AdminPages/AdminEntityPage.cs10-111](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/AdminPages/AdminEntityPage.cs#L10-L111) [StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs1-211](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs#L1-L211)
+
+### Dynamic UI Generation
+
+The `ShowColumnsPopup` class dynamically generates forms based on entity properties using reflection:
+
+
+|UI Control Type       |Property Type       |Generated Control                  |
+|----------------------|--------------------|-----------------------------------|
+|Foreign Key Properties|[ForeignKeyOf(Type)]|ComboBox with entity IDs           |
+|Boolean Properties    |bool                |CheckBox                           |
+|Time Properties       |TimeSpan            |TextBox with time format validation|
+|Numeric Properties    |int, double, decimal|TextBox with numeric validation    |
+|String Properties     |string              |TextBox                            |
+
+
+The system determines control types through reflection and custom attributes, enabling automatic form generation for any entity type.
+
+Sources: [StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs68-165](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs#L68-L165)
+
+Data Seeding and Initialization
+-------------------------------
+
+### Application Startup Process
+
+In debug mode, the application automatically recreates and seeds the database:
+
+```
+
+```
+
+
+Sources: [StudentScheduleClient/App.xaml.cs23-40](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/App.xaml.cs#L23-L40) [StudentScheduleBackend/Seeder.cs9-48](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Seeder.cs#L9-L48)
+
+### Database User Management
+
+The seeding process creates SQL Server logins and database users with appropriate permissions:
+
+*   `ReadWriteLogin` receives `db_owner` role for full database access
+*   `ReadLogin` receives `db_datareader` role for read-only access
+
+Sources: [StudentScheduleBackend/Seeder.cs20-47](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Seeder.cs#L20-L47)
+
+Key Architectural Patterns
+--------------------------
+
+### Repository Pattern Implementation
+
+The system implements a generic repository pattern where `Repository<T>` provides consistent CRUD operations for any entity type inheriting from the `Entity` base class.
+
+### Singleton Database Context
+
+The `Context` class uses a thread-safe singleton pattern with lazy initialization to ensure single database connection management across the application.
+
+### Dynamic Form Generation
+
+The UI layer uses reflection to automatically generate appropriate input controls based on entity property types and custom attributes, eliminating the need for hand-coded forms for each entity type.
+
+### Role-Based Data Access
+
+Authentication determines database connection permissions, with admin users receiving full access and students receiving read-only access at the database level.
+
+Sources: [StudentScheduleBackend/Context.cs25-92](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs#L25-L92) [StudentScheduleClient/AdminPages/AdminEntityPage.cs10-20](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/AdminPages/AdminEntityPage.cs#L10-L20) [StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs68-165](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs#L68-L165)
