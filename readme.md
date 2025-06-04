@@ -1,4 +1,4 @@
-# PiotrekPrezydent/StudentSchedule
+# PiotrekPrezydent/StudentSchedule | DeepWiki
 Overview
 --------
 
@@ -22,23 +22,46 @@ System Architecture
 
 The StudentSchedule system follows a modular architecture with clear separation of concerns across presentation, business logic, and data access layers.
 
-### High-Level Component Architecture
+### High-Level Component Architecturee
 
-```
+## Client Tier
 
-```
+### App.xaml.cs
+- Application entry point
+
+### LoginWindow
+- Authentication UI
+
+### StudentWindow
+- Student schedule view
+
+### AdminWindow
+- Administrative interface
+
+## Business Tier (Backend)
+
+### Repository
+- CRUD operations for Gerente
+
+### Sender.cs
+- Database initialization
+
+### CUItoolsCommand Line
+- Standard command line tools
+- Database backup tool
+
+### Content.cs
+- DbContext Singleton
+
+## Data Tier
+
+### SQL Server
+- EF Core Migrations
+- StudentSchedule Database
 
 
 Sources: [StudentScheduleClient/App.xaml.cs1-59](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/App.xaml.cs#L1-L59) [StudentScheduleBackend/Context.cs1-236](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs#L1-L236) [StudentScheduleBackend/Seeder.cs1-173](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Seeder.cs#L1-L173)
 
-### Authentication and Session Management Flow
-
-```
-
-```
-
-
-Sources: [StudentScheduleBackend/Context.cs94-122](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs#L94-L122) [StudentScheduleClient/App.xaml.cs44-57](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/App.xaml.cs#L44-L57)
 
 Core System Components
 ----------------------
@@ -70,10 +93,40 @@ Sources: [StudentScheduleBackend/Context.cs25-92](https://github.com/PiotrekPrez
 ### Generic CRUD Operations
 
 The `AdminEntityPage<T>` class implements a generic pattern for administrative data management:
+# AdminEntityPage<T> Class
 
-```
+## Fields
+- `Repository<T> _repository`
+- `List<KeyValuePair> _filters`
 
-```
+## Methods
+- `+ OnEdit()`
+- `+ OnDelete()`
+- `+ OnAdd()`
+- `+ OnFilter()`
+
+---
+
+# Repository<T> Class
+
+## Methods
+| Method | Description |
+|--------|-------------|
+| `+ GetAll()` | Retrieves all entities |
+| `+ Add(entity)` | Adds new entity |
+| `+ Update(entity)` | Updates existing entity |
+| `+ Delete(id)` | Removes entity by ID |
+
+## ShowColumnsPopup Component
+- `+ List<KeyValuePair> ReadedValues`
+- `+ GenerateColumns(entityType, popupType)`
+- `+ SetReadedValues()`
+
+---
+
+# Abstract Entity Class
+- `+ int Id` (identifier field)
+- `+ CreateFromKVP<T>(kvps)` (factory method that creates entity from KeyValuePairs)
 
 
 Sources: [StudentScheduleClient/AdminPages/AdminEntityPage.cs10-111](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/AdminPages/AdminEntityPage.cs#L10-L111) [StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs1-211](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs#L1-L211)
@@ -102,11 +155,6 @@ Data Seeding and Initialization
 ### Application Startup Process
 
 In debug mode, the application automatically recreates and seeds the database:
-
-```
-
-```
-
 
 Sources: [StudentScheduleClient/App.xaml.cs23-40](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/App.xaml.cs#L23-L40) [StudentScheduleBackend/Seeder.cs9-48](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Seeder.cs#L9-L48)
 
