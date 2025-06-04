@@ -1,4 +1,4 @@
-# PiotrekPrezydent/StudentSchedule | DeepWiki
+# PiotrekPrezydent/StudentSchedule
 Overview
 --------
 
