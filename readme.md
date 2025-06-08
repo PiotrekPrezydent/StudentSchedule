@@ -1,189 +1,182 @@
 # PiotrekPrezydent/StudentSchedule
-Overview
---------
 
-Relevant source files
+## Przegląd
 
-*   [StudentScheduleBackend/Context.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs)
-*   [StudentScheduleBackend/Seeder.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Seeder.cs)
-*   [StudentScheduleClient/AdminPages/AdminEntityPage.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/AdminPages/AdminEntityPage.cs)
-*   [StudentScheduleClient/App.xaml.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/App.xaml.cs)
-*   [StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs)
+**Istotne pliki źródłowe:**
 
-Purpose and Scope
------------------
+- [StudentScheduleBackend/Context.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs)  
+- [StudentScheduleBackend/Seeder.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Seeder.cs)  
+- [StudentScheduleClient/AdminPages/AdminEntityPage.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/AdminPages/AdminEntityPage.cs)  
+- [StudentScheduleClient/App.xaml.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/App.xaml.cs)  
+- [StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs)
 
-This document provides a comprehensive overview of the StudentSchedule repository, a desktop-based student scheduling management system. The system enables educational institutions to manage student enrollments, academic programs, class schedules, and facility assignments through a WPF desktop application with role-based access control.
+---
 
-The system implements a three-tier architecture consisting of a WPF client application, Entity Framework Core-based backend services, and SQL Server database. For detailed information about specific components: authentication mechanisms are covered in [Authentication & Authorization](https://deepwiki.com/PiotrekPrezydent/StudentSchedule/3-authentication-and-authorization), the data model structure is detailed in [Data Model](https://deepwiki.com/PiotrekPrezydent/StudentSchedule/4-data-model), and administrative interface functionality is explained in [Admin Interface](https://deepwiki.com/PiotrekPrezydent/StudentSchedule/5-admin-interface).
+## Cel i Zakres
 
-System Architecture
--------------------
+Ten dokument zawiera kompleksowy przegląd repozytorium StudentSchedule — desktopowego systemu zarządzania planami zajęć studentów. System umożliwia instytucjom edukacyjnym zarządzanie zapisami studentów, programami nauczania, harmonogramami zajęć i przypisaniami sal w aplikacji WPF z kontrolą dostępu opartą na rolach.
 
-The StudentSchedule system follows a modular architecture with clear separation of concerns across presentation, business logic, and data access layers.
+System implementuje trójwarstwową architekturę składającą się z aplikacji klienckiej WPF, usług backendowych opartych na Entity Framework Core oraz bazy danych SQL Server.
 
-### High-Level Component Architecturee
+Szczegóły dotyczące wybranych komponentów:
 
-## Client Tier
+- Mechanizmy uwierzytelniania: [Authentication & Authorization](https://deepwiki.com/PiotrekPrezydent/StudentSchedule/3-authentication-and-authorization)
+- Struktura modelu danych: [Data Model](https://deepwiki.com/PiotrekPrezydent/StudentSchedule/4-data-model)
+- Funkcjonalność panelu administracyjnego: [Admin Interface](https://deepwiki.com/PiotrekPrezydent/StudentSchedule/5-admin-interface)
 
-### App.xaml.cs
-- Application entry point
+---
 
-### LoginWindow
-- Authentication UI
+## Architektura Systemu
 
-### StudentWindow
-- Student schedule view
+StudentSchedule wykorzystuje modularną architekturę z wyraźnym podziałem odpowiedzialności pomiędzy warstwami prezentacji, logiki biznesowej i dostępu do danych.
 
-### AdminWindow
-- Administrative interface
+### Architektura komponentów wysokiego poziomu
 
-## Business Tier (Backend)
+#### Warstwa Klienta
 
-### Repository
-- CRUD operations for Gerente
+- **App.xaml.cs** – punkt wejścia aplikacji  
+- **LoginWindow** – interfejs logowania  
+- **StudentWindow** – widok harmonogramu dla studentów  
+- **AdminWindow** – panel administracyjny
 
-### Sender.cs
-- Database initialization
+#### Warstwa Logiki Biznesowej (Backend)
 
-### CUItoolsCommand Line
-- Standard command line tools
-- Database backup tool
+- **Repository** – operacje CRUD dla encji
+- **Seeder.cs** – inicjalizacja bazy danych
+- **CUItools (Command Line)** – narzędzia CLI (m.in. backup bazy danych)
+- **Context.cs** – singleton `DbContext`
 
-### Content.cs
-- DbContext Singleton
+#### Warstwa Danych
 
-## Data Tier
+- **SQL Server**
+  - Migracje EF Core
+  - Baza danych StudentSchedule
 
-### SQL Server
-- EF Core Migrations
-- StudentSchedule Database
+---
 
+## Kluczowe Komponenty Systemu
 
-Sources: [StudentScheduleClient/App.xaml.cs1-59](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/App.xaml.cs#L1-L59) [StudentScheduleBackend/Context.cs1-236](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs#L1-L236) [StudentScheduleBackend/Seeder.cs1-173](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Seeder.cs#L1-L173)
+### DbContext i Zarządzanie Połączeniem
 
+Klasa `Context` implementuje bezpieczny wątkowo singleton do dostępu do bazy danych z dynamicznym generowaniem connection stringów na podstawie zalogowanego użytkownika:
 
-Core System Components
-----------------------
+- **Komponent:** `Context.Instance`
+  - Odpowiedzialność: punkt dostępu Singleton
+  - Kluczowe metody: `Initialize()`, `BuildConnectionString()`
 
-### Database Context and Connection Management
+- **Komponent:** Generator connection stringów
+  - Odpowiedzialność: dostęp do bazy na podstawie roli
+  - Wykorzystuje: `ReadWriteLogin` dla admina, `ReadLogin` dla studenta
 
-The `Context` class implements a thread-safe singleton pattern for database access with dynamic connection string generation based on user authentication:
+- **Komponent:** Dostęp do encji
+  - Odpowiedzialność: bezpieczne typowo pobieranie danych
+  - Kluczowa metoda: `GetEntitiesByType()` – refleksja
 
+System wykorzystuje różne poświadczenia SQL w zależności od roli:
 
+- `ReadWriteLogin` / `ReadWritePass` – dostęp pełny (admin)
+- `ReadLogin` / `ReadPass` – tylko do odczytu (student)
 
-* Component: Context.Instance
-  * Responsibility: Singleton access point
-  * Key Methods: Initialize(), BuildConnectionString()
-* Component: Connection String Builder
-  * Responsibility: Role-based database access
-  * Key Methods: Uses ReadWriteLogin for admins, ReadLogin for students
-* Component: Entity Access
-  * Responsibility: Type-safe entity retrieval
-  * Key Methods: GetEntitiesByType() for reflection-based operations
+---
 
+### Operacje CRUD (Ogólne)
 
-The system uses separate database credentials for different user roles:
+Klasa `AdminEntityPage<T>` implementuje generyczny wzorzec zarządzania danymi administracyjnymi:
 
-*   `ReadWriteLogin`/`ReadWritePass` for administrative operations
-*   `ReadLogin`/`ReadPass` for student read-only access
+#### `AdminEntityPage<T>`
 
-Sources: [StudentScheduleBackend/Context.cs25-92](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs#L25-L92) [StudentScheduleBackend/Context.cs94-122](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs#L94-L122)
+**Pola:**
 
-### Generic CRUD Operations
-
-The `AdminEntityPage<T>` class implements a generic pattern for administrative data management:
-# AdminEntityPage<T> Class
-
-## Fields
 - `Repository<T> _repository`
 - `List<KeyValuePair> _filters`
 
-## Methods
-- `+ OnEdit()`
-- `+ OnDelete()`
-- `+ OnAdd()`
-- `+ OnFilter()`
+**Metody:**
+
+- `OnEdit()`
+- `OnDelete()`
+- `OnAdd()`
+- `OnFilter()`
+
+#### `Repository<T>`
+
+| Metoda         | Opis                          |
+|----------------|-------------------------------|
+| `GetAll()`     | Pobiera wszystkie encje       |
+| `Add(entity)`  | Dodaje nową encję             |
+| `Update(entity)`| Aktualizuje istniejącą encję |
+| `Delete(id)`   | Usuwa encję na podstawie ID   |
 
 ---
 
-# Repository<T> Class
+### Komponent ShowColumnsPopup
 
-## Methods
-| Method | Description |
-|--------|-------------|
-| `+ GetAll()` | Retrieves all entities |
-| `+ Add(entity)` | Adds new entity |
-| `+ Update(entity)` | Updates existing entity |
-| `+ Delete(id)` | Removes entity by ID |
+- `ReadedValues` – lista odczytanych wartości
+- `GenerateColumns(entityType, popupType)` – dynamiczne tworzenie kolumn na podstawie typu
+- `SetReadedValues()` – przypisanie wartości do kontrolek
 
-## ShowColumnsPopup Component
-- `+ List<KeyValuePair> ReadedValues`
-- `+ GenerateColumns(entityType, popupType)`
-- `+ SetReadedValues()`
+#### Abstrakcyjna Klasa Entity
+
+- `int Id` – pole identyfikatora
+- `CreateFromKVP<T>(kvps)` – fabryka tworząca encję na podstawie KeyValuePair
 
 ---
 
-# Abstract Entity Class
-- `+ int Id` (identifier field)
-- `+ CreateFromKVP<T>(kvps)` (factory method that creates entity from KeyValuePairs)
+## Dynamiczne Generowanie UI
 
+Klasa `ShowColumnsPopup` dynamicznie generuje formularze w oparciu o właściwości encji wykorzystując refleksję:
 
-Sources: [StudentScheduleClient/AdminPages/AdminEntityPage.cs10-111](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/AdminPages/AdminEntityPage.cs#L10-L111) [StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs1-211](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs#L1-L211)
+| Typ właściwości       | Typ kontrolki UI            | Generowana kontrolka                 |
+|------------------------|-----------------------------|--------------------------------------|
+| Właściwości klucza obcego | `[ForeignKeyOf(Type)]`     | ComboBox z ID encji                  |
+| Boolean                | `bool`                      | CheckBox                             |
+| Czas                   | `TimeSpan`                  | TextBox z walidacją formatu          |
+| Liczbowe               | `int`, `double`, `decimal`  | TextBox z walidacją liczbową         |
+| Tekstowe               | `string`                    | TextBox                              |
 
-### Dynamic UI Generation
+---
 
-The `ShowColumnsPopup` class dynamically generates forms based on entity properties using reflection:
+## Inicjalizacja i Ziarno Danych
 
+### Proces uruchamiania aplikacji
 
-|UI Control Type       |Property Type       |Generated Control                  |
-|----------------------|--------------------|-----------------------------------|
-|Foreign Key Properties|[ForeignKeyOf(Type)]|ComboBox with entity IDs           |
-|Boolean Properties    |bool                |CheckBox                           |
-|Time Properties       |TimeSpan            |TextBox with time format validation|
-|Numeric Properties    |int, double, decimal|TextBox with numeric validation    |
-|String Properties     |string              |TextBox                            |
+W trybie debug aplikacja automatycznie usuwa i tworzy bazę danych oraz zasiewa dane:
 
+Źródła:  
+- [App.xaml.cs (23–40)](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/App.xaml.cs#L23-L40)  
+- [Seeder.cs (9–48)](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Seeder.cs#L9-L48)
 
-The system determines control types through reflection and custom attributes, enabling automatic form generation for any entity type.
+### Zarządzanie użytkownikami bazy
 
-Sources: [StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs68-165](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs#L68-L165)
+Proces ziarna tworzy konta logowania SQL i przypisuje odpowiednie role:
 
-Data Seeding and Initialization
--------------------------------
+- `ReadWriteLogin` – rola `db_owner` (pełny dostęp)
+- `ReadLogin` – rola `db_datareader` (tylko odczyt)
 
-### Application Startup Process
+---
 
-In debug mode, the application automatically recreates and seeds the database:
+## Kluczowe Wzorce Architektoniczne
 
-Sources: [StudentScheduleClient/App.xaml.cs23-40](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/App.xaml.cs#L23-L40) [StudentScheduleBackend/Seeder.cs9-48](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Seeder.cs#L9-L48)
+### Wzorzec Repositorium
 
-### Database User Management
+System implementuje generyczny wzorzec repository – `Repository<T>` udostępnia jednolite operacje CRUD dla każdej encji dziedziczącej po klasie bazowej `Entity`.
 
-The seeding process creates SQL Server logins and database users with appropriate permissions:
+### Singleton DbContext
 
-*   `ReadWriteLogin` receives `db_owner` role for full database access
-*   `ReadLogin` receives `db_datareader` role for read-only access
+Klasa `Context` używa bezpiecznego singletona z lazy inicjalizacją – gwarantuje jeden wspólny punkt dostępu do bazy danych.
 
-Sources: [StudentScheduleBackend/Seeder.cs20-47](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Seeder.cs#L20-L47)
+### Dynamiczne Formularze
 
-Key Architectural Patterns
---------------------------
+Warstwa UI używa refleksji do automatycznego generowania kontrolek wejściowych na podstawie typu danych i atrybutów, eliminując potrzebę ręcznego tworzenia formularzy dla każdej encji.
 
-### Repository Pattern Implementation
+### Dostęp do danych oparty na rolach
 
-The system implements a generic repository pattern where `Repository<T>` provides consistent CRUD operations for any entity type inheriting from the `Entity` base class.
+Autoryzacja użytkownika określa poziom dostępu do bazy danych:
+- admin: pełny dostęp
+- student: tylko odczyt
 
-### Singleton Database Context
+---
 
-The `Context` class uses a thread-safe singleton pattern with lazy initialization to ensure single database connection management across the application.
-
-### Dynamic Form Generation
-
-The UI layer uses reflection to automatically generate appropriate input controls based on entity property types and custom attributes, eliminating the need for hand-coded forms for each entity type.
-
-### Role-Based Data Access
-
-Authentication determines database connection permissions, with admin users receiving full access and students receiving read-only access at the database level.
-
-Sources: [StudentScheduleBackend/Context.cs25-92](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs#L25-L92) [StudentScheduleClient/AdminPages/AdminEntityPage.cs10-20](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/AdminPages/AdminEntityPage.cs#L10-L20) [StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs68-165](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs#L68-L165)
+Źródła:  
+- [Context.cs (25–92)](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleBackend/Context.cs#L25-L92)  
+- [AdminEntityPage.cs (10–20)](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/AdminPages/AdminEntityPage.cs#L10-L20)  
+- [ShowColumnsPopup.xaml.cs (68–165)](https://github.com/PiotrekPrezydent/StudentSchedule/blob/3c991c28/StudentScheduleClient/Popups/ShowColumnsPopup.xaml.cs#L68-L165)
