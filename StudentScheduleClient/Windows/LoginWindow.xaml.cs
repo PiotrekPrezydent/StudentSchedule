@@ -15,12 +15,14 @@ namespace StudentScheduleClient
         public LoginWindow()
         {
             InitializeComponent();
+            PasswordBox.Password = "Haslo123!";
         }
 
         void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             var login = LoginBox.Text;
-            var password = PasswordBox.Text;
+
+            var password = PasswordBox.Password;
 
             string exeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
             string configPath = Path.Combine(exeFolder, "AppSettings.json");

@@ -174,6 +174,14 @@ Autoryzacja użytkownika określa poziom dostępu do bazy danych:
 - admin: pełny dostęp
 - student: tylko odczyt
 
+### Zdjęcia działającej aplikacji:
+![LoginWindow](images/loginwindow.png)
+
+
+![StudentWindow](images/studentwindow.png)
+
+
+![AdminWindow](images/adminwindow.png)
 ---
 
 Źródła:  
